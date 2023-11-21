@@ -1,0 +1,6 @@
+1. tableview 그리기 ->background 색깔 연결로 확인 
+2. cell 잘 들어가는지 
+UITableViewDelegate,UITableViewDataSource
+
+연결은 myTableView.delegate = self
+     myTableView.datasource = self
