@@ -1,0 +1,45 @@
+git init
+
+建立新的本地端 Repository。
+
+git clone [Repository URL]
+
+複製遠端的 Repository 檔案到本地端。
+
+git status
+
+檢查本地端檔案異動狀態。
+
+git add [檔案或資料夾]
+
+將指定的檔案（或資料夾）加入版本控制。用 git add . 可加入全部。
+
+git commit
+
+提交（commit）目前的異動。
+
+git commit -m "提交說明內容"
+
+提交（commit）目前的異動並透過 -m 參數設定摘要說明文字。
+
+git log
+
+查看先前的 commit 記錄。
+
+git push
+
+將本地端 Repository 的 commit 發佈到遠端。
+
+git pull
+
+那 git pull 又是什麼？看上面的圖的意思也是將檔案從 GitHub 下載到電腦中，跟 git clone 有什麼差別呢？
+
+因為專案通常是多人共同進行開發，當有人新增新的功能 push 到 GitHub 上，你就又要重新下載到電腦中，因此 git pull 就是為了這個而存在的。
+
+簡單來說，git clone 是在你第一次下載這個專案時使用的，而後續想要將 GitHub 上修改的內容再合併到本地數據庫時，就只要使用 git pull 這個指令就可以了！
+
+可以把 git pull 想成 pull = fetch + merge（fetch 和 merge 後續會再繼續介紹）
+
+舉例來說，我在 GitHub 上新增了一個 README.md 檔案，想要將他合併到本地數據庫中，只要輸入以下指令：
+git pull origin master
+這段指令的意思是：本地的當前分支會自動與對應的 origin 主機「追蹤分支：master」進行合併。
