@@ -1,0 +1,32 @@
+두 정수 a, b가 주어졌을 때 a와 b 사이에 속한 모든 정수의 합을 리턴하는 함수, solution을 완성하세요.
+예를 들어 a = 3, b = 5인 경우, 3 + 4 + 5 = 12이므로 12를 리턴합니다.
+
+
+func solution(_ a: Int, _ b: Int) -> Int64 {
+    // 如果 a 和 b 相等，直接返回 a（或 b）
+    if a == b {
+        return Int64(a)
+    }
+
+    // a 和 b 之间较小的值
+    let minValue = min(a, b)
+
+    // a 和 b 之间较大的值
+    let maxValue = max(a, b)
+
+    // 使用区间运算符创建整数序列，然后使用 reduce 方法计算和
+    return Int64((minValue ... maxValue).reduce(0, +))
+}
+
+
+函数解释：
+
+if a == b: 检查 a 和 b 是否相等。如果相等，直接返回其中一个数，因为它们之间的整数序列只包含一个元素。
+let minValue = min(a, b): 找到 a 和 b 中较小的值。
+let maxValue = max(a, b): 找到 a 和 b 中较大的值。
+(minValue ... maxValue): 使用区间运算符创建整数序列，表示从 minValue 到 maxValue 的所有整数。
+.reduce(0, +): 使用 reduce 方法对整数序列进行求和，初始值为 0，使用 + 运算符进行累加。
+Int64(...): 将最终的和转换为 Int64 类型。
+返回计算得到的和作为结果。
+在上面的例子中，如果 a 和 b 相等，函数直接返回其中一个数，否则返回两个数之间所有整数的和。
+
