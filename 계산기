@@ -1,0 +1,36 @@
+Lv1
+
+class Calculator {
+    func add(firstNumber: Double, secondNumber: Double) -> Double {
+        return firstNumber + secondNumber
+    }
+
+    func subtract(firstNumber: Double, secondNumber: Double) -> Double {
+        return firstNumber - secondNumber
+    }
+
+    func multiply(firstNumber: Double, secondNumber: Double) -> Double {
+        return firstNumber * secondNumber
+    }
+
+    func divide(firstNumber: Double, secondNumber: Double) -> Double {
+        // 防止除零错误
+        guard secondNumber != 0 else {
+            print("Error: Division by zero.")
+            return 0
+        }
+        return firstNumber / secondNumber
+    }
+}
+
+let calculator = Calculator()
+
+let addResult = calculator.add(firstNumber: 5, secondNumber: 3)
+let subtractResult = calculator.subtract(firstNumber: 8, secondNumber: 2)
+let multiplyResult = calculator.multiply(firstNumber: 4, secondNumber: 6)
+let divideResult = calculator.divide(firstNumber: 9, secondNumber: 3)
+
+print("addResult : \(addResult)")
+print("subtractResult : \(subtractResult)")
+print("multiplyResult : \(multiplyResult)")
+print("divideResult : \(divideResult)")
