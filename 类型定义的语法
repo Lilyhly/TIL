@@ -1,0 +1,10 @@
+类型定义的语法
+结构体和类有着相似的定义方式。你通过 struct 关键字引入结构体，通过 class 关键字引入类，并将它们的具体定义放在一对大括号中：
+struct SomeStructure {
+    // 在这里定义结构体
+}
+class SomeClass {
+    // 在这里定义类
+}
+注意
+每当你定义一个新的结构体或者类时，你都是定义了一个新的 Swift 类型。请使用 UpperCamelCase 这种方式来命名类型（如这里的 SomeClass 和 SomeStructure），以便符合标准 Swift 类型的大写命名风格（如 String，Int 和 Bool）。请使用 lowerCamelCase 这种方式来命名属性和方法（如 frameRate 和 incrementCount），以便和类型名区分。
