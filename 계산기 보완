@@ -1,0 +1,173 @@
+Lv1 & Lv2 
+
+class Calculator {
+    func add(firstNumber: Double, secondNumber: Double) -> Double {
+        return firstNumber + secondNumber
+    }
+
+    func subtract(firstNumber: Double, secondNumber: Double) -> Double {
+        return firstNumber - secondNumber
+    }
+
+    func multiply(firstNumber: Double, secondNumber: Double) -> Double {
+        return firstNumber * secondNumber
+    }
+
+    func divide(firstNumber: Double, secondNumber: Double) -> Double {
+        
+        guard secondNumber != 0 else {
+            print("Error: Division by zero.")
+            return 0
+        }
+        return firstNumber / secondNumber
+    }
+   func remainder(firstNumber: Double, secondNumber:Double) -> Double {
+      return fristNumber % secondNumber
+}
+
+let calculator = Calculator()
+
+let addResult = calculator.add(firstNumber: 5, secondNumber: 3)
+let subtractResult = calculator.subtract(firstNumber: 8, secondNumber: 2)
+let multiplyResult = calculator.multiply(firstNumber: 4, secondNumber: 6)
+let divideResult = calculator.divide(firstNumber: 9, secondNumber: 3)
+let remainderResult = calculator.divide(firstNumber: 12, secondNumber:6)
+
+
+print("addResult : \(addResult)")
+print("subtractResult : \(subtractResult)")
+print("multiplyResult : \(multiplyResult)")
+print("divideResult : \(divideResult)")
+print("remainderResult : \(remainderResult)")
+
+Lv3
+
+class AddOperation {
+    func perform(_ num1: Double, _ num2: Double) -> Double {
+        return num1 + num2
+    }
+}
+
+class SubtractOperation {
+    func perform(_ num1: Double, _ num2: Double) -> Double {
+        return num1 - num2
+    }
+}
+
+class MultiplyOperation {
+    func perform(_ num1: Double, _ num2: Double) -> Double {
+        return num1 * num2
+    }
+}
+
+class DivideOperation {
+    func perform(_ num1: Double, _ num2: Double) -> Double {
+       
+        guard num2 != 0 else {
+            print("Error: Division by zero.")
+            return 0
+        }
+        return num1 / num2
+    }
+}
+
+class Calculator {
+    private var num1: Double
+    private var num2: Double
+
+    init(num1: Double, num2: Double) {
+        self.num1 = num1
+        self.num2 = num2
+    }
+
+    func calculate(_ operation: Operation) -> Double {
+        return operation.perform(num1, num2)
+    }
+}
+
+  func calculate(operator: String, num1: Int, num2: Int) -> Double {
+        if `operator` == "+" {
+            return addOperation.operate(firstNumber: num1, secondNumber: num2)
+        }
+        if `operator` == "-" {
+            return subtractOperation.operate(firstNumber: num1, secondNumber: num2)
+        }
+        if `operator` == "*" {
+            return multiplyOperation.operate(firstNumber: num1, secondNumber: num2)
+        }
+        if `operator` == "/" {
+            return divideOperation.operate(firstNumber: num1, secondNumber: num2)
+        }
+        return 0
+    }
+}
+Lv4
+
+Class AbstracOperation {
+    func operate(firstNumber: Double, secondNumber: Double) -> Double {
+        return 0
+    }
+}
+
+class AddOperation: AbstractOperation {
+    override func operate(firstNumber: Double, secondNumber: Double) -> Double {
+        return Double(fisrtNumber + secondNumber)
+    }
+}
+class abstractOperation: AbstractOperation {
+    override func operate (firstNumber: Double, secondNumber: Double) -> Double {
+        return Double(fisrtNumber - secondNumber)
+    }
+}
+
+class MultiplyOperation: AbstractOperation {
+ override func operate (firstNumber: Double, secondNumber: Double) -> Double {
+        return Double(fisrtNumber * secondNumber)
+    }
+}
+
+class DivideOperation: AbstractOperation {
+ override func operate (firstNumber: Double, secondNumber: Double) -> Double {
+        return Double(fisrtNumber / secondNumber)
+    }
+}
+
+
+Class Calculator {
+    private var abstractOperation : AbstractOpeartion
+
+    init(operation: AbstractOperation) {
+        self.abstractOpeartion = operation
+}
+    func setOperation(operation: AbstractOperation) {
+        self.abstractOperation = operation
+    }
+
+
+    func calculate(firstNumber: Double, secondNumber: Double) -> Double {
+        abstractOperation.operate(firstNumber: firstNumber, secondNumber: secondNumber)
+    }
+}
+    
+let calculator = Calculator(operation: AddOperation())
+
+let addResult = calculator.calculate(firstNumber: 10, secondNumber: 20)
+
+calculator.setOperation(operation: SubtractOperation())
+let subtractResult = calculator.calculate(firstNumber: 30, secondNumber: 20)
+
+calculator.setOperation(operation: MultiplyOperation())
+let multiplyResult = calculator.calculate(firstNumber: 10, secondNumber: 5)
+
+calculator.setOperation(operation: DivideOperation())
+let divideResult = calculator.calculate(firstNumber: 40, secondNumber: 10)
+
+print("addResult : \(addResult)")
+print("subtractResult : \(subtractResult)")
+print("multiplyResult : \(multiplyResult)")
+print("divideResult : \(divideResult)")
+
+
+
+
+
