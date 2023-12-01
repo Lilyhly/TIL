@@ -14,7 +14,7 @@ class Calculator {
     }
 
     func divide(firstNumber: Double, secondNumber: Double) -> Double {
-        // 防止除零错误
+        
         guard secondNumber != 0 else {
             print("Error: Division by zero.")
             return 0
@@ -34,3 +34,58 @@ print("addResult : \(addResult)")
 print("subtractResult : \(subtractResult)")
 print("multiplyResult : \(multiplyResult)")
 print("divideResult : \(divideResult)")
+
+
+Lv2 
+
+class Calculator {
+    private var currentResult: Double?
+
+    func add(_ number: Double) -> Calculator {
+        if let result = currentResult {
+            currentResult = result + number
+        } else {
+            currentResult = number
+        }
+        return self
+    }
+
+    func subtract(_ number: Double) -> Calculator {
+        if let result = currentResult {
+            currentResult = result - number
+        } else {
+            currentResult = number
+        }
+        return self
+    }
+
+    func multiply(_ number: Double) -> Calculator {
+        if let result = currentResult {
+            currentResult = result * number
+        } else {
+            currentResult = number
+        }
+        return self
+    }
+
+    func divide(_ number: Double) -> Calculator {
+        
+        guard number != 0 else {
+            print("Error: Division by zero.")
+            return self
+        }
+
+        if let result = currentResult {
+            currentResult = result / number
+        } else {
+            currentResult = number
+        }
+        return self
+    }
+
+    func getResult() -> Double? {
+        return currentResult
+    }
+}
+
+
