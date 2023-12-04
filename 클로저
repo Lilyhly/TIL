@@ -1,0 +1,207 @@
+1) 클로저(Closure)
+☑️ 클로저
+클로저는 이름없는 함수 즉, 코드 블록을 말합니다.
+클로저는 상수나 변수의 참조를 캡쳐(capture)해 저장할 수 있습니다
+스위프트의 클로저는 주변 환경에 있는 변수나 상수를 캡처하여 저장하고, 이를 나중에 사용할 수 있도록 합니다. 이것은 클로저가 생성될 때 클로저가 참조하는 변수 또는 상수의 값에 대한 복사본을 유지하고 저장하는 메커니즘입니다
+값(value) 캡처: 클로저가 변수나 상수의 값을 캡처합니다. 이때, 클로저 내부에서 캡처한 값이 변경되어도 원본 값은 변경되지 않습니다.
+참조(reference) 캡처: 클로저가 변수나 상수의 참조를 캡처합니다. 따라서 클로저 내에서 해당 변수나 상수를 변경하면 원본 값도 변경됩니다.
+// 값 캡처
+func makeIncrementer(forIncrement amount: Int) -> () -> Int {
+    var total = 0
+    
+    // 클로저를 반환합니다.
+    let incrementer: () -> Int = {
+        // total 변수를 캡처하여 저장합니다.
+        total += amount
+        return total
+    }
+    
+    return incrementer
+}
+
+let incrementByTen = makeIncrementer(forIncrement: 10)
+
+print(incrementByTen()) // total = 10, 결과: 10
+print(incrementByTen()) // total = 20, 결과: 20
+
+// 참조 캡처
+class SimpleClass {
+    var value: Int = 10
+}
+
+func createClosure() -> (() -> Int) {
+    let instance = SimpleClass()
+    
+    // 참조 캡처를 사용하여 SimpleClass의 인스턴스를 캡처합니다.
+    let closure: () -> Int = {
+        // 클로저가 참조하는 인스턴스의 속성을 업데이트합니다.
+        instance.value *= 2
+        return instance.value
+    }
+    
+    return closure
+}
+
+// 클로저 생성
+let myClosure = createClosure()
+
+print(myClosure()) // 20
+print(myClosure()) // 40
+
+// 클로저 내부에서 참조된 인스턴스의 속성을 변경하였으므로 원본에도 영향을 줍니다.
+​
+클로저를 사용하는 이유는 뭘까요? 가장 일반적으로는 기능을 저장하기 위해 사용합니다.
+클로저는 비동기 처리가 필요할 때 사용할 수 있는 코드 블록입니다.(반드시 비동기에만 사용하는 것은 아님)
+클로저는 클래스와 마찬가지로 참조 타입(reference type)입니다. 
+예시 코드
+{ (parameters) -> return type in
+    // 구현 코드
+}
+
+// 함수와 클로저 비교
+func pay(user: String, amount: Int) {
+    // code
+}
+
+let payment = { (user: String, amount: Int) in
+    // code
+}
+​
+func func1(_ param: String) -> String {
+    return param + "!"
+}
+
+func func2(name: String) -> String {
+    return name + "***"
+}
+
+// 함수를 변수에 할당가능(변수가 함수를 가르키게 됨)
+var a: (String) -> String = func1
+
+a("안녕")
+
+a = func2
+
+a("hello")
+
+// 함수(클로저)를 변수에 할당해서
+let closure1 = { (param: String) -> String in         // 클로저 리터럴
+    return param + "!"
+}
+
+// 사용(실행)
+closure1("스티브")
+
+​
+활용 예제 코드
+/// 예시1
+// 1) (클로저를 파라미터로 받는 함수)정의
+
+func closureFunc2(closure: () -> ()) {
+    print("시작")
+    closure()
+}
+
+// 파라미터로 사용할 함수/클로저를 정의
+func doneFunc() {          // 함수를 정의
+    print("종료")
+}
+
+let doneClosure = { () -> () in      // 클로저를 정의
+    print("종료")
+}
+
+// 함수를 파라미터로 넣으면서 실행 (그동안에 배운 형태로 실행한다면)
+closureFunc2(closure: doneFunc)
+
+closureFunc2(closure: doneClosure)
+
+
+// 2) 함수를 실행할때 클로저 형태로 전달 (클로저를 사용하는 이유)
+closureFunc2(closure: { () -> () in
+    print("프린트 종료")           // 본래 정의된 함수를 실행시키면서, 클로저를 사후적으로 정의 가능
+})                              // (활용도가 늘어남)
+
+closureFunc2(closure: { () -> () in
+    print("프린트 종료 - 1")
+    print("프린트 종료 - 2")
+    
+})
+
+/// 예시2
+// 1) (클로저를 파라미터로 받는 함수)정의
+func closureCaseFunction(a: Int, b: Int, closure: (Int) -> Void) {
+    let c = a + b
+    closure(c)
+}
+
+// 2) 함수를 실행할 때 (클로저 형태로 전달)
+closureCaseFunction(a: 1, b: 2, closure: { (n) in    // 사후적 정의
+    print("plus : \(n)")
+})
+
+closureCaseFunction(a: 1, b: 2) {(number) in      // 사후적 정의
+    print("result : \(number)")
+}
+
+closureCaseFunction(a: 4, b: 3) { (number) in      // 사후적 정의
+    print("value : \(number)")
+}
+
+/*
+ 파라미터 생략 등 간소화 문법
+ */
+
+// 함수의 정의
+
+func performClosure(param: (String) -> Int) {
+    param("Swift")
+}
+
+// 문법을 최적화하는 과정
+// 1) 타입 추론(Type Inference)
+performClosure(param: { (str: String) in
+    return str.count
+})
+
+performClosure(param: { str in
+    return str.count
+})
+
+// 2) 한줄인 경우, 리턴을 안 적어도 됨(Implicit Return)
+performClosure(param: { str in
+    str.count
+})
+
+// 3) 아규먼트 이름을 축약(Shorthand Argements)
+performClosure(param: {
+    $0.count
+})
+
+// 4) 트레일링 클로저
+performClosure(param: {
+    $0.count
+})
+
+performClosure() {
+    $0.count
+}
+
+performClosure { $0.count }
+
+let closureType1 = { (param) in
+    return param % 2 == 0
+}
+
+let closureType2 = { $0 % 2 == 0 }
+
+// 축약 형태로의 활용
+let closureType3 = { (a: Int, b:Int) -> Int in
+    return a * b
+}
+
+let closureType4: (Int, Int) -> Int = { (a, b) in
+    return a * b
+}
+
+let closureType5: (Int, Int) -> Int = { $0 * $1 }
