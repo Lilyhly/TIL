@@ -1,0 +1,21 @@
+String형 배열 seoul의 element중 "Kim"의 위치 x를 찾아, "김서방은 x에 있다"는 String을 반환하는 함수, solution을 완성하세요. seoul에 "Kim"은 오직 한 번만 나타나며 잘못된 값이 입력되는 경우는 없습니다.
+
+func solution(_ seoul: [String]) -> String {
+    // "Kim"의 인덱스 찾기
+    if let index = seoul.firstIndex(of: "Kim") {
+        return "김서방은 \(index)에 있다"
+    } else {
+        return ""
+    }
+}
+
+// 示例用法
+let result = solution(["Jane", "Kim", "John"])
+print(result)  // 출력: 김서방은 1에 있다
+函数解释：
+
+seoul.firstIndex(of: "Kim"): 查找数组 seoul 中 "Kim" 的第一个出现位置的索引。
+if let index = ...: 使用可选绑定，如果找到了索引，就执行下面的语句。
+return "김서방은 \(index)에 있다": 如果找到了 "Kim" 的位置，返回相应的字符串，其中 \(index) 是 "Kim" 的索引。
+如果数组中没有 "Kim"，返回空字符串。
+在示例用法中，solution(["Jane", "Kim", "John"]) 返回 "김서방은 1에 있다"，因为 "Kim" 在数组中的索引是 1。
