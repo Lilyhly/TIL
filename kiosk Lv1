@@ -1,5 +1,5 @@
 레벨1 구성 방법
-
+무한루프로 메뉴 화면에 계속 보이게 합니다.
 
 import Foundation
 while true {
