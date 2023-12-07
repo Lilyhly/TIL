@@ -1,0 +1,20 @@
+在 Swift 中，() 表示函數調用，而不是函數類型。在你的程式碼中，displayInfo(): Unit 是一個函數類型的聲明，但是你的 displayInfo 屬性應該是一個函數，而不是函數類型。
+
+這是修正後的代碼：
+
+swift
+Copy code
+class MenuItem {
+    var name: String
+    var price: Double
+    var displayInfo: () -> Unit
+    
+    init(name: String, price: Double, displayInfo: @escaping () -> Unit) {
+        self.name = name
+        self.price = price
+        self.displayInfo = displayInfo
+    }
+}
+這樣你的 displayInfo 屬性就是一個接受 () -> Unit 函數類型的閉包，而在 init 方法中將閉包賦值給它。注意，這裡的 @escaping 關鍵字表示閉包在初始化期間可能會逃逸（在初始化方法之外被保留和調用）。
+
+請注意，Unit 似乎是一個未定義的類型，如果你想表示空類型，可以使用 Void。
