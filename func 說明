@@ -1,0 +1,26 @@
+在 Swift 中，func 是用來聲明函數的關鍵字。函數是執行特定任務的代碼塊，它有一個名稱，接受零個或多個輸入參數，並返回一個值。
+
+函數的一般形式如下：
+
+swift
+
+func functionName(parameters) -> ReturnType {
+    // 函數執行的代碼
+    return someValue
+}
+其中：
+
+func：函數的關鍵字。
+functionName：函數的名稱。
+parameters：函數的輸入參數，如果沒有參數，則可以省略。
+ReturnType：函數的返回類型，如果函數不返回值，則使用 Void 或 ()。
+以下是一個簡單的例子：
+
+swift
+func greet(name: String) -> String {
+    return "Hello, \(name)!"
+}
+
+let greeting = greet(name: "John")
+print(greeting) // 輸出: Hello, John!
+上述例子中，greet 是一個接受 name 參數的函數，返回一個帶有問候語的字符串。
