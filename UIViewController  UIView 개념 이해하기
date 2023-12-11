@@ -1,0 +1,17 @@
+### UIViewController
+
+UIKit 앱의 View 계층을 관리하는 개체(object)
+**`UIViewController`** 클래스는 뒤에서 배울 UILabel, UIButton, UIImageView 등과 같은
+다양한 UIView 요소들을 포함하고, 관리(제어)할 수 있습니다.
+
+모든 `**UIViewController**` 는 하나의 **`Root View`** 를 가지고 있으며, `**UIView**`요소를 포함합니다.
+
+위의 그림에서는 UIViewController와 해당 View 간의 기본적인 관계를 보여 줍니다.
+
+### UIView
+
+화면을 구성하는 기본 객체(object)
+
+사용자 인터페이스를 구성하는 데 중요한 역할을 하는 클래스입니다. UIView 클래스는 화면에 보이는 모든 요소의 기본 클래스이며, 버튼, 레이블, 이미지, 입력 필드 등의 요소들은 모두 UIView의 하위 객체(object)들 입니다.
+
+다양한 UIView 컴포넌트들에 대해서는 아래에서 학습합니다.
