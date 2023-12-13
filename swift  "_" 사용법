@@ -1,0 +1,29 @@
+func hello(friend: String) {
+    print("hello \(friend)")
+}
+
+hello(friend: "철수")
+
+func hello2(_ friend: String) {
+    print("hello \(friend)")
+}
+
+hello2("철수")
+
+func hello3(to friend: String) {
+    print("hello \(friend)")
+}
+
+hello3(to: "철수")
+
+func helloToManyPeople(person1: String, _ person2: String) {
+    print("hello \(person1) and \(person2)")
+}
+
+helloToManyPeople(person1: "철수", "영희")
+
+func helloToManyPeople2(person1: String, and person2: String) {
+    print("hello \(person1) and \(person2)")
+}
+
+helloToManyPeople2(person1: "철수", and: "영희")
