@@ -1,0 +1,32 @@
+어떤 정수들이 있습니다. 이 정수들의 절댓값을 차례대로 담은 정수 배열 absolutes와 이 정수들의 부호를 차례대로 담은 불리언 배열 signs가 매개변수로 주어집니다. 실제 정수들의 합을 구하여 return 하도록 solution 함수를 완성해주세요.
+
+제한사항
+absolutes의 길이는 1 이상 1,000 이하입니다.
+absolutes의 모든 수는 각각 1 이상 1,000 이하입니다.
+signs의 길이는 absolutes의 길이와 같습니다.
+signs[i] 가 참이면 absolutes[i] 의 실제 정수가 양수임을, 그렇지 않으면 음수임을 의미합니다.
+use swift with chinese
+
+import Foundation
+
+func solution(_ absolutes:[Int], _ signs:[Bool]) -> Int {
+    var answer = 0
+
+    for i in 0..<signs.count {
+        answer += signs[i] == true ? absolutes[i] : -absolutes[i]
+    }
+
+    return answer
+} 
+
+
+这段 Swift 代码是为了解决一个问题：给定两个数组 absolutes 和 signs，其中 absolutes 是一组整数，signs 是一组布尔值，表示每个整数的符号。函数的目标是计算这些整数的绝对值，并根据对应的符号数组确定其正负，然后计算它们的总和。
+
+现在来详细解释代码：
+
+func solution(_ absolutes:[Int], _ signs:[Bool]) -> Int：这是一个接收两个参数 absolutes 和 signs 的函数，返回一个整数。
+var answer = 0：声明一个变量 answer 并初始化为 0，用于存储最终的整数总和。
+for i in 0..<signs.count：使用 for 循环遍历 signs 数组中的每个元素。
+answer += signs[i] == true ? absolutes[i] : -absolutes[i]：这是一个累加操作，根据 signs[i] 的值为 true 还是 false 来确定是加上 absolutes[i] 还是减去 absolutes[i]。
+return answer：返回最终的整数总和。
+这个函数实现了根据符号数组确定整数正负并计算它们的绝对值之和的逻辑。
