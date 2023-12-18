@@ -1,0 +1,11 @@
+정수가 들어 있는 배열 num_list가 매개변수로 주어집니다. num_list의 원소의 순서를 거꾸로 뒤집은 배열을 return하도록 solution 함수를 완성해주세요.
+
+func solution(_ numList: [Int]) -> [Int] {
+    return Array(numList.reversed())
+}
+
+// 示例用法
+let originalArray = [1, 2, 3, 4, 5]
+let reversedArray = solution(originalArray)
+print(reversedArray)  // 输出 [5, 4, 3, 2, 1]
+这段 Swift 代码中使用了 reversed() 方法来获取原数组的逆序序列，然后通过 Array() 构造函数将其转换为数组。
