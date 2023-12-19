@@ -1,0 +1,88 @@
+import UIKit
+
+class ViewController: UIViewController, UITableViewDataSource {
+  
+    
+    private let table: UITableView = {
+        let table = UITableView()
+        table.register(UITableViewCell.self,
+                       forCellReuseIdentifier: "cell")
+        return table
+    }()
+
+    var items = [String]()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.items = UserDefaults.standard.stringArray(forKey: "items") ?? []
+        title = "To Do List"
+        view.addSubview(table)
+        table.dataSource = self
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapAdd))
+        
+    }
+    
+    @objc private func didTapAdd() {
+        let alert = UIAlertController(title: "New Item", message: "Enter new to do list item!", preferredStyle: .alert)
+        alert.addTextField {field in
+            field.placeholder = "Enter item..."
+        }
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Done", style: .default, handler: { [weak self](_) in
+            if let field = alert.textFields?.first {
+                if let text = field.text, !text.isEmpty {
+                    
+                    
+                    
+                    DispatchQueue.main.async {
+                        var currentItems = UserDefaults.standard.stringArray(forKey: "items") ?? []
+                        currentItems.append(text)
+                        
+                        UserDefaults.standard.setValue(currentItems, forKey:"items" )
+                        self?.items.append(text)
+                        self?.table.reloadData()
+                    }
+                }
+            }
+        }))
+        present(alert, animated: true)
+    }
+    
+    override func viewDidLayoutSubviews() {
+            super.viewDidLayoutSubviews()
+            table.frame = view.bounds
+        }
+        // Do any additional setup after loading the view.
+    
+        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+            return items.count
+        }
+        
+        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cell" , for: indexPath)
+            cell.textLabel?.text = items[indexPath.row]
+            return cell
+        }
+    
+}
+
+
+这段代码实现了一个简单的待办事项列表应用。下面是对代码的详细解释：
+
+ViewController 是主视图控制器，继承自 UIViewController，并遵循 UITableViewDataSource 协议。
+table 是一个 UITableView 实例，通过闭包进行了懒加载，注册了 UITableViewCell，并设置了标识符为 "cell"。
+items 是一个字符串数组，用于存储待办事项的内容。
+在 viewDidLoad 方法中进行了初始化设置：
+通过 UserDefaults 读取已保存的待办事项，如果有则加载到 items 中。
+设置导航栏标题为 "To Do List"。
+将 table 添加到视图中。
+设置数据源为当前的视图控制器。
+在导航栏右侧添加了一个 "Add" 的 UIBarButtonItem，并设置其点击事件为 didTapAdd 方法。
+didTapAdd 方法处理了点击 "Add" 按钮的逻辑：
+创建了一个 UIAlertController 弹窗，包含一个文本输入框和两个按钮。
+点击 "Done" 按钮会执行闭包，将输入的内容保存到 UserDefaults 中，并更新 items 数组，然后刷新表格视图。
+在 viewDidLayoutSubviews 中设置了 table 的 frame 为整个视图的边界。
+实现 UITableViewDataSource 协议的两个方法：
+tableView(_:numberOfRowsInSection:) 返回待办事项数组的数量。
+tableView(_:cellForRowAt:) 为每个单元格设置内容，从 items 数组中取出对应位置的文本。
+这样，用户可以通过点击导航栏右上角的 "Add" 按钮来添加新的待办事项，新的事项会显示在表格中，同时使用 UserDefaults 进行数据的持久化。
