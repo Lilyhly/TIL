@@ -1,0 +1,33 @@
+要添加删除功能，您可以在 UITableViewDataSource 中实现 commit editingStyle 方法。下面是如何修改您的代码以支持删除的示例：
+
+在 viewDidLoad 方法中，启用表格视图的编辑模式：
+swift
+Copy code
+table.isEditing = true
+在 ViewController 类中添加以下方法：
+swift
+Copy code
+func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    if editingStyle == .delete {
+        // 删除数据源中的对应项
+        items.remove(at: indexPath.row)
+        
+        // 更新 UserDefaults
+        UserDefaults.standard.setValue(items, forKey: "items")
+        
+        // 删除表格视图中的对应行
+        tableView.deleteRows(at: [indexPath], with: .fade)
+    }
+}
+最后，在 viewDidLoad 方法中为表格视图设置数据源并设置代理：
+swift
+Copy code
+table.dataSource = self
+table.delegate = self
+确保您的 ViewController 类遵循了 UITableViewDelegate 协议：
+swift
+Copy code
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    // ...
+}
+这样，您就可以在表格视图的每一行右侧出现删除按钮，用户可以通过滑动单元格或点击编辑按钮进行删除。删除操作将更新数据源和 UserDefaults，并从表格视图中移除相应的行。
