@@ -1,0 +1,31 @@
+@objc是什麼？
+
+
+@objc 是 Swift 中的一个特性，它用于将成员（比如方法、属性）暴露给 Objective-C 运行时。
+Swift 与 Objective-C 可以无缝地交互，但有些 Swift 的特性在 Objective-C 中并不支持，因此需要使用 @objc 来进行标记，以便在 Objective-C 中可见。
+
+在您提供的代码中，@objc private func didTapAdd() 将 didTapAdd 方法标记为 Objective-C 可见。在这种情况下，@objc 不是必需的，因为您的代码中并没有涉及 Objective-C，
+但如果您的 Swift 代码需要与 Objective-C 代码进行交互，您可能会需要使用 @objc 来确保您的 Swift 成员对 Objective-C 可见。
+User
+什麼狀況會出現
+
+
+@objc 通常在以下情况下使用：
+
+Objective-C 互操作性： 当您的 Swift 代码需要与 Objective-C 代码进行交互时，您可能需要使用 @objc。Objective-C 不能直接访问 Swift 中的所有特性，
+因此通过添加 @objc 标记，您可以确保 Swift 成员对 Objective-C 可见。
+Selector 的使用： 在使用某些 Objective-C 特性，例如通过字符串指定方法名（Selector）时，您需要使用 @objc 标记。
+继承自 Objective-C 类： 如果您的 Swift 类继承自 Objective-C 类，可能需要使用 @objc 标记一些成员以确保兼容性。
+KVO（Key-Value Observing）： 在使用 KVO 进行属性观察时，被观察的属性需要使用 @objc dynamic 进行标记，以确保 KVO 正常工作。
+示例：
+
+swift
+
+class MyClass: NSObject {
+    @objc dynamic var myProperty: Int = 0
+
+    @objc func myMethod() {
+        // 方法实现
+    }
+}
+上述示例中，@objc dynamic 用于标记属性 myProperty，以确保 KVO 正常运作。
