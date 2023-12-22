@@ -1,0 +1,11 @@
+"Cocoa Touch" 和 "Swift file" 是两个不同的概念，它们分别涉及到不同的方面。
+
+Cocoa Touch:
+Cocoa Touch 是一组用于创建iOS应用程序的框架和工具的集合。它是Apple提供的移动应用程序开发框架，涵盖了iOS应用程序的核心功能，如用户界面、触摸输入、动画、网络通信等。
+Cocoa Touch 使用Objective-C和Swift等编程语言来实现应用程序的逻辑。
+Cocoa Touch提供了诸如UIKit、Foundation、Core Data等框架，这些框架为iOS应用程序提供了丰富的功能和工具。
+Swift file:
+"Swift file" 通常是指用Swift编程语言编写的源代码文件。在Xcode中，您可以创建Swift文件，其中包含了用Swift语言编写的类、结构体、函数等代码。
+Swift是一种由Apple推出的现代编程语言，用于iOS、macOS、watchOS和tvOS应用程序的开发。Swift语言强调可读性、易用性和安全性。
+Swift文件中的代码可以调用Cocoa Touch框架提供的功能，利用Cocoa Touch中的UIKit、Foundation等框架来构建iOS应用程序。
+总的来说，Cocoa Touch是一组框架和工具，而Swift file是包含Swift编程语言代码的源代码文件。在iOS开发中，您使用Swift语言编写的文件（Swift file）通常会涉及使用Cocoa Touch框架来构建应用程序。
