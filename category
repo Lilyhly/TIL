@@ -1,0 +1,44 @@
+import UIKit
+
+class CategoryBarViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        let categoryBar = createCategoryBar()
+        view.addSubview(categoryBar)
+        
+        categoryBar.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            categoryBar.topAnchor.constraint(equalTo: view.topAnchor),
+            categoryBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            categoryBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            categoryBar.heightAnchor.constraint(equalToConstant: 50)
+        ])
+    }
+
+    private func createCategoryBar() -> UIStackView {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
+        stackView.spacing = 8
+        
+        let categories = ["추천메뉴", "햄버거", "디저트/치킨"]
+        
+        for category in categories {
+            let button = UIButton(type: .system)
+            button.setTitle(category, for: .normal)
+            button.addTarget(self, action: #selector(categoryButtonTapped(_:)), for: .touchUpInside)
+            stackView.addArrangedSubview(button)
+        }
+        
+        return stackView
+    }
+
+    @objc private func categoryButtonTapped(_ sender: UIButton) {
+        if let category = sender.title(for: .normal) {
+            print("Selected category: \(category)")
+            // 在这里可以根据选择的类别执行相应的操作
+        }
+    }
+}
