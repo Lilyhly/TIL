@@ -1,0 +1,48 @@
+UIStackView 和 UICollectionView 是两种不同的布局组件，它们的主要作用也不同。
+
+UIStackView 是用于管理一组视图（例如按钮、标签等）的布局的容器。它通过简化 Auto Layout 的使用，使得布局更加简单。UIStackView 可以将其中的子视图水平或垂直地排列。
+UICollectionView 是用于展示可滚动的、具有多个项目的集合视图的组件。它更适合用于显示大量的、可定制的项目。UICollectionView 通常与自定义的 UICollectionViewCell 类配合使用。
+如果你想将 UIStackView 和 UICollectionView 结合起来，你可以将 UICollectionView 放置在 UIStackView 中的一个子视图中。这样，你可以在 UIStackView 中包含其他的视图（例如按钮、标签等），同时也可以包含 UICollectionView，以便在界面中实现更复杂的布局。
+
+下面是一个简单的示例，演示如何将 UICollectionView 放置在 UIStackView 中：
+
+swift
+Copy code
+import UIKit
+
+class YourViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.distribution = .fill
+
+        // 添加其他视图到 UIStackView 中
+        let label = UILabel()
+        label.text = "Your Label"
+        stackView.addArrangedSubview(label)
+
+        // 添加 UICollectionView 到 UIStackView 中
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        // 配置你的 UICollectionView
+
+        stackView.addArrangedSubview(collectionView)
+
+        // 添加 UIStackView 到主视图中
+        view.addSubview(stackView)
+
+        // 设置 UIStackView 的约束
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: view.topAnchor),
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+}
+在这个例子中，stackView 是一个垂直排列的 UIStackView，其中包含一个 UILabel 和一个 UICollectionView。你可以根据实际需要调整 stackView 的属性以及配置 UICollectionView。
+
+请注意，这只是一个简单的示例，实际的布局可能会根据你的需求更加复杂。
