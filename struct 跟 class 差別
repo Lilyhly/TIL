@@ -1,0 +1,51 @@
+swift 中 struct 跟 class 差別？
+
+
+在 Swift 中，struct（结构体）和 class（类）都是用来定义自定义数据类型的关键字，但它们之间有一些关键的区别。以下是它们的主要差异：
+
+值类型 vs 引用类型：
+struct 是值类型（value type）。当你创建一个结构体的实例，并将其分配给另一个变量或常量，实际上是在将整个值复制给新的变量。修改一个实例的属性不会影响其他实例。
+class 是引用类型（reference type）。当你创建一个类的实例，并将其分配给另一个变量或常量，它们实际上都引用相同的实例。修改一个实例的属性会影响所有引用它的地方。
+拷贝 vs 共享：
+struct 实例的拷贝是独立的，修改一个实例不会影响其他实例。
+class 实例是共享的，修改一个实例会影响所有引用它的地方。
+继承：
+struct 不支持继承。
+class 支持继承，可以创建子类。
+初始化方法：
+struct 默认提供一个成员逐一初始化器（memberwise initializer），你可以使用该初始化器来初始化结构体的属性。
+class 默认没有成员逐一初始化器，需要自定义初始化器。
+Deinitializer：
+struct 没有析构函数（deinitializer）。
+class 可以有析构函数，用于在实例释放之前执行一些清理工作。
+使用场景：
+一般来说，当你的数据可以被视为一个简单的值时，可以使用 struct。例如，坐标、颜色等。
+当你需要引用同一份数据的多个副本时，或者需要使用继承来共享和扩展代码时，可以使用 class。
+例子：
+
+swift
+
+// Struct
+struct Point {
+    var x: Int
+    var y: Int
+}
+
+var point1 = Point(x: 1, y: 2)
+var point2 = point1 // point2 是 point1 的拷贝，而不是引用
+point2.x = 5
+print(point1.x) // 输出: 1
+
+// Class
+class Person {
+    var name: String
+    init(name: String) {
+        self.name = name
+    }
+}
+
+var person1 = Person(name: "Alice")
+var person2 = person1 // person2 和 person1 引用同一个实例
+person2.name = "Bob"
+print(person1.name) // 输出: Bob
+需要根据具体的需求选择使用 struct 还是 class。在很多情况下，你可以根据值语义和拷贝行为选择 struct，以避免一些潜在的问题。
