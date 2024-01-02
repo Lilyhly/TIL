@@ -1,0 +1,9 @@
+MVC（Model-View-Controller）是一種軟體設計模式，用於組織和管理應用程序中的程式碼。在Apple的開發中，特別是在iOS和macOS應用程序中，MVC是一個常見的架構模式。
+
+在MVC中，應用程序被分為三個主要組件：
+
+Model（模型）： 負責應用程序的數據和業務邏輯。Model通常包含應用程序的核心數據結構，並定義了如何訪問和修改這些數據。
+View（視圖）： 負責顯示數據給用戶並處理用戶輸入。View是用戶界面的呈現部分，它根據Model的數據來顯示信息，並將用戶的操作轉發給Controller。
+Controller（控制器）： 負責處理用戶輸入、更新Model和通知View來更新界面。Controller充當Model和View之間的中介，確保它們保持獨立並與之間的通信進行協調。
+在Apple的開發環境中，MVC是一種常見的架構模式，尤其在iOS開發中。然而，Apple還引入了其他架構模式，例如MVVM（Model-View-ViewModel）和更近期的SwiftUI框架中的結構化數據流（Structured Data Flow），
+以滿足不同需求和提供更現代的開發體驗。
