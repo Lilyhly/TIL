@@ -1,0 +1,44 @@
+segue?
+
+
+在 iOS 中，Segue 是一種用於定義畫面（View Controller）之間轉換的機制。當應用程式的用戶執行某些操作（例如按鈕點擊）時，Segue 允許你定義過渡的方式，從一個 View Controller 切換到另一個 View Controller。
+
+Segue 提供了一個直觀且可視化的方法，可以在 Interface Builder 中連接兩個 View Controller。你可以在 Interface Builder 中使用拖放的方式來建立 Segue。
+當 Segue 建立後，你可以透過特定的觸發（例如按鈕點擊）來觸發 Segue 的執行。
+
+Segue 主要有兩種類型：
+
+Show Segue（Push Segue）： 用於將目標 View Controller 推入導航堆棧（Navigation Stack）中，通常與 UINavigationController 一起使用。在執行 Show Segue 時，目標 View Controller 會從右側滑入。
+Modal Segue： 用於以模態（Modal）的方式顯示目標 View Controller，它會覆蓋在當前 View Controller 的上方。Modal Segue 可以用於顯示臨時的或獨立的畫面。
+Segue 的生命週期包括以下階段：
+
+Preparation（準備）： 在執行 Segue 之前，iOS 會調用源 View Controller 的 prepare(for:sender:) 方法，你可以在這個方法中進行資料的傳遞或額外的設定。
+Perform（執行）： 在 Segue 的執行階段，目標 View Controller 會被初始化，並且過渡動畫會被顯示。
+Unwind（返回）： 在目標 View Controller 完成其操作後，你可以使用 Unwind Segue 將控制返回到源 View Controller。 Unwind Segue 通常用於實現返回功能。
+Segue 是一個方便且強大的工具，可以簡化 View Controller 之間的導航和轉換。
+User
+present, push 方法？
+
+
+在 iOS 中，present 和 push 是兩種不同的方式用於顯示和導航到其他 View Controller。
+
+present 方法：
+使用 present 方法，你可以將一個 View Controller 模態（Modal）地顯示在當前的 View Controller 上。
+模態顯示意味著新的 View Controller 會覆蓋在當前的 View Controller 之上，通常用於臨時性的或與當前內容無直接關聯的畫面。
+示例如下：
+swift
+
+let destinationViewController = AnotherViewController()
+present(destinationViewController, animated: true, completion: nil)
+push 方法：
+使用 push 方法通常與 UINavigationController 一起使用，它將目標 View Controller 推入導航堆棧（Navigation Stack）中。
+push 操作需要在 UINavigationController 中進行，當推入新的 View Controller 時，導航列（Navigation Bar）會自動顯示返回按鈕，並保留上一層的 View Controller。
+示例如下：
+swift
+
+let destinationViewController = AnotherViewController()
+navigationController?.pushViewController(destinationViewController, animated: true)
+總結：
+
+使用 present 來實現模態顯示，將 View Controller 覆蓋在當前的 View Controller 上。
+使用 push 通常與 UINavigationController 一起使用，將目標 View Controller 推入導航堆棧中，並提供導航列的返回按鈕。
