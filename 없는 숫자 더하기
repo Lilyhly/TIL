@@ -1,0 +1,25 @@
+없는 숫자 더하기
+
+
+Description
+
+0부터 9까지의 숫자 중 일부가 들어있는 정수 배열 numbers가 매개변수로 주어집니다. numbers에서 찾을 수 없는 0부터 9까지의 숫자를 모두 찾아 더한 수를 return 하도록 solution 함수를 완성해주세요.
+
+這段 Swift 程式碼是一個簡單的函式 solution，接受一個整數陣列 numbers 作為參數，並回傳一個整數結果。
+
+
+
+func solution(_ numbers: [Int]) -> Int {
+    let result = 45 - numbers.reduce(0) { $0 + $1 }
+    return result
+}
+現在來逐步解釋這段程式碼：
+
+reduce 方法：
+numbers.reduce(0) { $0 + $1 } 使用了 Swift 中的 reduce 方法。這個方法將陣列中的元素進行結合，最終生成一個單一的值。
+在這裡，0 是 reduce 的初始值，$0 代表當前累積的總和，$1 代表陣列中的每個元素，$0 + $1 表示將目前的總和與每個元素相加。
+差異的計算：
+let result = 45 - numbers.reduce(0) { $0 + $1 } 使用了這個 reduce 的結果來計算差異。
+45 是一個固定的數字，而 numbers.reduce(0) { $0 + $1 } 是陣列 numbers 中所有元素的總和。
+將 45 減去 numbers 中所有元素的總和，得到的結果就是這個函式的回傳值。
+總的來說，這個函式的目的似乎是計算 numbers 陣列中所有元素的差異值，以及 45 之間的差異。因此，結果可能是正數、零或負數，取決於 numbers 中的元素總和相對於 45 的大小。
