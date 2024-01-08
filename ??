@@ -1,0 +1,16 @@
+在 Swift 中，?? 是一個稱為 nil coalescing operator（空值合併運算符）的運算符。這個運算符提供了一種簡潔的方式來處理可選值為 nil 的情況。
+
+具體來說，a ?? b 表示如果 a 不為 nil，則返回 a 的值；如果 a 為 nil，則返回預設值 b。這可以幫助簡化對可選值的處理，避免使用冗長的 if let 或 guard let 構造。
+
+例如：
+
+
+let optionalValue: Int? = someFunctionThatMayReturnNil()
+let result = optionalValue ?? 0
+在這個例子中，如果 optionalValue 不為 nil，則 result 將獲得 optionalValue 的值；如果 optionalValue 為 nil，則 result 將獲得預設值 0。
+
+這個運算符還可用於處理多個可選值：
+
+
+let result = optionalValue1 ?? optionalValue2 ?? defaultValue
+這表示如果 optionalValue1 不為 nil，則返回 optionalValue1；如果 optionalValue1 為 nil 且 optionalValue2 不為 nil，則返回 optionalValue2；如果兩者都為 nil，則返回預設值 defaultValue。
