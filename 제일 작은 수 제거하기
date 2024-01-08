@@ -1,0 +1,60 @@
+Description
+
+정수를 저장한 배열, arr 에서 가장 작은 수를 제거한 배열을 리턴하는 함수, solution을 완성해주세요. 단, 리턴하려는 배열이 빈 배열인 경우엔 배열에 -1을 채워 리턴하세요. 예를들어 arr이 [4,3,2,1]인 경우는 [4,3,2]를 리턴 하고, [10]면 [-1]을 리턴 합니다.
+제한 조건
+arr은 길이 1 이상인 배열입니다.
+인덱스 i, j에 대해 i ≠ j이면 arr[i] ≠ arr[j] 입니다.
+입출력 예
+arr	return
+[4,3,2,1]	[4,3,2]
+[10]	[-1]
+
+
+這個 Swift 函數是為了解決一個問題：給定一個整數陣列 arr，需要找出該陣列中的最小值，然後將陣列中所有等於最小值的元素移除。
+
+下面是函數的解釋：
+
+
+func solution(_ arr:[Int]) -> [Int] {
+    // 找到陣列中的最小值
+    let min = arr.sorted(by: <)[0]
+    
+    // 如果陣列只包含一個元素，返回 [-1]
+    if arr.count == 1 {
+        return [-1]
+    } else {
+        // 使用 compactMap 來過濾掉所有等於最小值的元素
+        let result = arr.compactMap({ return $0 != min ? $0 : nil })
+        return result
+    }
+}
+這裡有一些關鍵點：
+
+arr.sorted(by: <)[0]：這一行代碼使用 sorted(by:) 方法將陣列升序排列，然後取得排列後的第一個元素，即最小值。這裡使用 < 運算符來比較整數大小。
+arr.count == 1 ? [-1] : ...：這是一個三元條件運算符，如果陣列的元素個數為 1，則返回包含 -1 的陣列，否則執行冒號後的邏輯。
+arr.compactMap({ return $0 != min ? $0 : nil })：這一行使用 compactMap 方法過濾掉陣列中所有等於最小值的元素。$0 代表陣列中的元素，如果元素不等於最小值 min，則返回該元素；否則返回 nil。最終，compactMap 將結果中的 nil 值移除，返回一個新的陣列。
+總的來說，這個函數的目的是找到陣列中的最小值，並移除陣列中所有等於最小值的元素，最終返回修改後的陣列。
+
+
+
+
+
+
+compactMap 方法?
+
+
+compactMap 是 Swift 中的一個高階函數，主要用於對集合進行轉換和過濾。它的定義如下：
+
+
+func compactMap<ElementOfResult>(_ transform: (Element) throws -> ElementOfResult?) rethrows -> [ElementOfResult]
+這個函數接受一個閉包 transform，該閉包用於將集合的每個元素映射到一個可選的新元素。然後，它創建一個新的陣列，其中僅包含映射後不為 nil 的值。
+
+在使用 compactMap 時，您可以返回一個可選的值，如果返回 nil，則該值將在最終的結果中被忽略。這使得 compactMap 非常適合過濾掉集合中不符合特定條件的元素。
+
+在先前提到的例子中：
+
+
+let result = arr.compactMap({ return $0 != min ? $0 : nil })
+這裡的 compactMap 用於過濾掉陣列中所有等於 min 的元素，只保留那些不等於 min 的元素。最終返回的 result 就是過濾後的陣列。
+
+注意：在 Swift 5.0 之後，compactMap 方法更改為接受一個非可選的映射閉包，這使得對返回可選值的閉包的處理更加一致，並引入了一個新的 compactMapValues 方法來處理字典值。
