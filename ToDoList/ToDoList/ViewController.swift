@@ -4,70 +4,48 @@
 //
 //  Created by 洪立妍 on 12/18/23.
 //
-
 import UIKit
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-  
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        
-      
-        if editingStyle == .delete {
-            // 删除数据源中的对应项
-            items.remove(at: indexPath.row)
-            
-            // 更新 UserDefaults
-            UserDefaults.standard.setValue(items, forKey: "items")
-            
-            // 删除表格视图中的对应行
-            tableView.deleteRows(at: [indexPath], with: .fade)
-            
-    
-        }
-        
-    }
-    
+   
     private let table: UITableView = {
         let table = UITableView()
         table.register(UITableViewCell.self,
                        forCellReuseIdentifier: "cell")
         return table
     }()
-
-    var items = [String]()
     
+    var items = [[String: Any]]()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.items = UserDefaults.standard.stringArray(forKey: "items") ?? []
+        
         title = "To Do List"
         view.addSubview(table)
         table.dataSource = self
+        table.delegate = self
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapAdd))
         table.isEditing = true
-        table.dataSource = self
-        table.delegate = self
+
+        // Load items from UserDefaults
+        if let savedItems = UserDefaults.standard.array(forKey: "items") as? [[String: Any]] {
+            items = savedItems
+        } else {
+            items = []
+        }
     }
     
     @objc private func didTapAdd() {
-        let alert = UIAlertController(title: "New Item", message: "Enter new to do list item!", preferredStyle: .alert)
-        alert.addTextField {field in
+        let alert = UIAlertController(title: "New Item", message: "Enter new to-do list item!", preferredStyle: .alert)
+        alert.addTextField { field in
             field.placeholder = "Enter item..."
         }
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: "Done", style: .default, handler: { [weak self](_) in
+        alert.addAction(UIAlertAction(title: "Done", style: .default, handler: { [weak self] (_) in
             if let field = alert.textFields?.first {
                 if let text = field.text, !text.isEmpty {
-                    
-                    
-                    
-                    DispatchQueue.main.async {
-                        var currentItems = UserDefaults.standard.stringArray(forKey: "items") ?? []
-                        currentItems.append(text)
-                        
-                        UserDefaults.standard.setValue(currentItems, forKey:"items" )
-                        self?.items.append(text)
-                        self?.table.reloadData()
-                    }
+                    self?.addItem(title: text, category: "Default")
+                    self?.table.reloadData()
                 }
             }
         }))
@@ -75,21 +53,69 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     override func viewDidLayoutSubviews() {
-            super.viewDidLayoutSubviews()
-            table.frame = view.bounds
-        }
-        // Do any additional setup after loading the view.
+        super.viewDidLayoutSubviews()
+        table.frame = view.bounds
+    }
     
-        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            return items.count
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return items.count
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if let todos = items[section]["todos"] as? [String] {
+            return todos.count
         }
-        
-        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cell" , for: indexPath)
-            cell.textLabel?.text = items[indexPath.row]
-            return cell
+        return 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        if let todos = items[indexPath.section]["todos"] as? [String] {
+            cell.textLabel?.text = todos[indexPath.row]
         }
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        let items = ["Work"]
+        return items[section]
+      }
+      func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 50
+      }
+
+//    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+//        return items[section]["title"] as? String
+//    }
+//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//        return 30
+//    }
+
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            if var todos = items[indexPath.section]["todos"] as? [String] {
+                todos.remove(at: indexPath.row)
+                items[indexPath.section]["todos"] = todos
+                UserDefaults.standard.setValue(items, forKey: "items")
+                tableView.deleteRows(at: [indexPath], with: .fade)
+            }
+        }
+    }
+    
+    
+    
+    
+    private func addItem(title: String, category: String) {
+        if let categoryIndex = items.firstIndex(where: { $0["title"] as? String == category }) {
+            items[categoryIndex]["todos"] = (items[categoryIndex]["todos"] as? [String] ?? []) + [title]
+        } else {
+            let newCategory = Category(title: category, todos: [title])
+            items.append(["category": newCategory])
+        }
+        UserDefaults.standard.setValue(items, forKey: "items")
+    }
+    
+    
+    
     
 }
-
-
