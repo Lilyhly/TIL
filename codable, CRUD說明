@@ -1,0 +1,62 @@
+Codable 是 Swift 中用於進行編碼（encoding）和解碼（decoding）的協議。它實際上是由兩個協議組成的合併體：Encodable 和 Decodable。
+
+Encodable
+Encodable 協議用於定義將自身編碼為其他格式（例如 JSON）的類型。
+類型可以採納 Encodable 協議，實現 encode(to:) 方法，該方法負責將實例的屬性編碼為指定的格式。
+Decodable
+Decodable 協議用於定義將其他格式（例如 JSON）解碼為自身的類型。
+類型可以採納 Decodable 協議，實現 init(from:) 初始化方法，該方法負責解析並初始化實例。
+Codable 協議的存在使得在 Swift 中對於 JSON 等格式的編碼和解碼變得簡單。當一個類型採納了 Codable 協議，它就能夠使用 Swift 的 JSONEncoder 和 JSONDecoder 這樣的類別來進行相應的操作。
+
+以下是一個簡單的範例：
+
+swift
+Copy code
+struct Person: Codable {
+    var name: String
+    var age: Int
+}
+
+let person = Person(name: "John", age: 30)
+
+// Encoding to JSON
+do {
+    let encoder = JSONEncoder()
+    let jsonData = try encoder.encode(person)
+    let jsonString = String(data: jsonData, encoding: .utf8)
+    print("JSON String: \(jsonString ?? "")")
+} catch {
+    print("Encoding failed: \(error.localizedDescription)")
+}
+
+// Decoding from JSON
+let jsonString = "{\"name\":\"Alice\",\"age\":25}"
+
+do {
+    let decoder = JSONDecoder()
+    let decodedPerson = try decoder.decode(Person.self, from: jsonString.data(using: .utf8)!)
+    print("Decoded Person: \(decodedPerson)")
+} catch {
+    print("Decoding failed: \(error.localizedDescription)")
+}
+在這個例子中，Person 結構實現了 Codable 協議，使得它可以方便地進行 JSON 編碼和解碼。
+
+什麼時候使用？
+
+
+ChatGPT
+Codable 在處理與外部格式（如 JSON）之間的數據交換時非常有用。以下是一些使用 Codable 的常見情境：
+
+與 API 交互： 當你從 Web API 中接收到 JSON 數據時，你可以使用 Codable 將 JSON 數據解碼成 Swift 的類型，或者將 Swift 的類型編碼成 JSON 數據以發送到 API。
+本地數據持久化： 如果你需要將應用程序中的數據（例如用戶設置、應用程序配置等）保存到本地文件系統，你可以使用 Codable 將 Swift 對象編碼為 JSON 並保存到文件中，或者將 JSON 數據解碼為 Swift 對象。
+與其他服務或庫進行數據交換： 當你與其他庫或服務進行數據交換時，如果它們支持 JSON 格式，你可以使用 Codable 輕鬆地編碼和解碼數據。
+快速的數據模型定義： 如果你有一個簡單的數據模型，只需少量的屬性，使用 Codable 可以迅速生成與 JSON 數據相匹配的 Swift 對象。
+總的來說，當你需要處理與外部數據格式之間的轉換時，Codable 是一個非常方便且強大的工具。
+
+CRUD 是一個縮寫，代表四個基本的數據操作：
+
+Create (創建): 創建（Create）指的是在數據存儲區（例如數據庫）中創建新的數據記錄。在數據庫中，這通常對應於插入一條新的數據行。
+Read (讀取): 讀取（Read）指的是檢索數據記錄。這可以通過搜尋特定條件、讀取整個數據集或僅讀取單個數據記錄來實現。
+Update (更新): 更新（Update）指的是修改現有的數據記錄。這可能包括修改數據行中的某些屬性或更新整個數據行。
+Delete (刪除): 刪除（Delete）指的是從數據存儲區中刪除數據記錄。在數據庫中，這通常對應於刪除數據表中的一條數據行。
+CRUD 是設計和使用數據存儲區的基本操作，它們是應用程序中對數據進行管理和操作的基礎。這些操作經常應用在與數據庫、文件系統或其他數據存儲區進行交互的應用程序中。
