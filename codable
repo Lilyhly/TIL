@@ -1,0 +1,18 @@
+User
+struct Todo: Codable {
+  let id: Int
+  let description: String
+  var isDone: Bool
+  let category: String 為什麼要用codable 不直接defaults ?
+
+
+Codable 协议用于支持在数据模型（如结构体或类）与外部表示之间的编码（Encoding）和解码（Decoding）。在这个上下文中，使用 Codable 的原因可能是您想要在您的应用中将 Todo 对象转换为 JSON 数据，或者从 JSON 数据中解析 Todo 对象。
+
+使用 Codable 有几个好处：
+
+持久化存储: 可以方便地将 Todo 对象保存到本地或云端，或者从中加载。
+与其他平台交互: 如果您的应用需要与其他平台或服务进行数据交换，Codable 提供了一种标准的方式来表示数据，例如使用 JSON。
+易于阅读和调试: JSON 是一种通用的数据表示形式，易于阅读和调试。通过使用 Codable，您可以直观地将 Swift 对象映射到 JSON 结构。
+虽然 UserDefaults 也可以用于存储和检索简单的数据，但 Codable 更适合于复杂的数据模型，特别是当您需要将数据导出到其他格式（如 JSON）或从其他格式导入时。此外，使用 Codable 可以更灵活地处理数据的编码和解码。
+
+如果您只需在应用内部存储和检索 Todo 对象，并且不需要与其他平台或服务进行数据交换，那么使用 UserDefaults 可能足够了。选择使用 Codable 还是 UserDefaults 取决于您的应用需求和设计选择。
