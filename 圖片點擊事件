@@ -1,0 +1,38 @@
+1.如果您想在 action 方法中處理圖片點擊事件而不是在設置圖片時添加手勢識別器，也是可以的。您可以將相應的動作添加到 tappedMenu 方法中，並在創建圖片後添加 action。
+
+以下是相應的代碼示例：
+
+let menuIcon = UIImageView(image: UIImage(named: "Menu"))
+menuIcon.layer.bounds.size = CGSize(width: 21, height: 17.5)
+
+// 在 action 裡設置圖片和添加 action
+menuIcon.isUserInteractionEnabled = true // 啟用使用者交互
+
+// 在 action 中設置手勢識別器和處理方法
+@objc func tappedMenu(_ sender: UITapGestureRecognizer) {
+    // 在這裡可以處理圖片點擊的操作
+}
+
+// 添加 tap 手勢識別器
+let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tappedMenu(_:)))
+menuIcon.addGestureRecognizer(tapGesture)
+
+這樣做的好處是，在代碼中，將所有關於圖片點擊事件的相關代碼放在一起，使代碼結構更加清晰和易於管理。
+
+2.是的，您也可以將手勢識別器的配置放在 action 的內部。這樣做的話，配置就會與 action 緊密結合在一起。以下是相應的示例：
+
+let menuIcon = UIImageView(image: UIImage(named: "Menu"))
+menuIcon.layer.bounds.size = CGSize(width: 21, height: 17.5)
+
+// 添加 tap 手勢識別器，並配置 action
+let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tappedMenu(_:)))
+tapGesture.numberOfTapsRequired = 1 // 設定點擊次數，這裡是單擊
+menuIcon.isUserInteractionEnabled = true // 啟用使用者交互
+menuIcon.addGestureRecognizer(tapGesture)
+
+// 在 action 裡處理點擊手勢觸發的操作
+@objc func tappedMenu(_ sender: UITapGestureRecognizer) {
+    // 在這裡可以處理點擊手勢觸發的操作
+}
+
+這樣做的優點是，所有與手勢相關的配置都在一個地方。不過，要確保手勢的相關配置在 action 被調用之前完成。
