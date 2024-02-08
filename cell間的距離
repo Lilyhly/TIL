@@ -1,0 +1,14 @@
+https://stackoverflow.com/questions/6216839/how-to-add-spacing-between-uitableviewcell
+https://ios-development.tistory.com/655
+
+TableView에서 커스텀셀에 레이아웃을 잡아줄때 요렇게 인셋을 줘서 해결할 수 있으실것 같아서요~!
+override func layoutSubviews() {
+    super.layoutSubviews()
+
+    contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 16.0, left: 16, bottom: 16, right: 16))
+      
+}
+
+간격 두 는 방법
+1.cell에 아까 하신것처럼 헤더푸터로 스페이싱을 두실 수도 있는데, 그렇다면 처음 보내드린것처럼 배경색을 지정하고 넣어야합니다.
+2.커스텀 셀에서 컨트롤한다면 위 코드 방식으로 하시면 될것 같아요!
