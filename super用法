@@ -1,0 +1,31 @@
+在子類別中覆蓋（重寫）父類別的方法時，通常可以選擇是否使用 super 關鍵字來調用父類別的方法，具體取決於你的需求和設計。
+
+以下是一些情況和建議：
+
+使用 super：
+當你希望在子類別的方法中保留父類別的行為，並在其基礎上添加額外的功能時，建議使用 super 關鍵字。
+使用 super 可以確保在子類別中調用的是父類別的方法，並且可以將子類別的功能與父類別的功能組合在一起。
+不使用 super：
+如果子類別完全重寫了父類別的方法，並且不需要保留父類別的任何行為，則可以直接在子類別中實現方法，而不使用 super 關鍵字。
+不使用 super 可以讓代碼更清晰明瞭，並且強調子類別的獨立性。
+讓我們舉個例子：
+
+swift
+
+class ParentClass {
+    func someMethod() {
+        print("Parent class method")
+    }
+}
+
+class ChildClass: ParentClass {
+    override func someMethod() {
+        super.someMethod() // 調用父類別的方法
+        print("Additional functionality in child class")
+    }
+}
+
+let childInstance = ChildClass()
+childInstance.someMethod() // 調用 ChildClass 的 someMethod 方法
+在上面的例子中，ChildClass 使用 super.someMethod() 調用了父類別的方法，這樣可以在子類別的方法中保留父類別的行為並添加額外的功能。
+然而，如果子類別完全重寫了 someMethod() 方法，而不需要父類別的行為，則可以直接在 ChildClass 中實現 someMethod() 方法而不使用 super。
