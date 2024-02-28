@@ -1,3 +1,10 @@
+autolayout로만 위치 잡을줄 알았는데 레벨과 레벨 사이에 간격 조절하기 되게 어렵다는거 알게 됐습니다.
+하지만 stackView로 하면 equa spacing 라는 방법이 있어서
+라벨이나 다른 ui 위치 잡고 싶을때 활용하면 참 좋을거같습니다. 
+
+
+
+
 autolayout 잡으면
 //    func setupTotalDaysLabel() {
 //        let customLabel = CustomLabel("4일", edgeInset: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
