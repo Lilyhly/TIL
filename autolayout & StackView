@@ -1,0 +1,213 @@
+autolayout 잡으면
+//    func setupTotalDaysLabel() {
+//        let customLabel = CustomLabel("4일", edgeInset: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
+//        view.addSubview(customLabel)
+//        
+//        customLabel.snp.makeConstraints { make in
+//            make.top.equalTo(view.safeAreaLayoutGuide).offset(140)
+//            make.leading.equalTo(view).offset(70)
+//            make.width.equalTo(30)
+//            make.height.equalTo(20)
+//        }
+//    }
+//    
+//    func setupTotalMinutesLabel() {
+//        let customLabel = CustomLabel("5분", edgeInset: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
+//        view.addSubview(customLabel)
+//        
+//        customLabel.snp.makeConstraints { make in
+//            make.top.equalTo(view.safeAreaLayoutGuide).offset(140)
+//            make.leading.equalTo(view).offset(170)
+//            make.width.equalTo(30)
+//            make.height.equalTo(20)
+//        }
+//    }
+//    
+//    func setupTotalHabbitsLabel() {
+//        let customLabel = CustomLabel("0개", edgeInset: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
+//        view.addSubview(customLabel)
+//        
+//        customLabel.snp.makeConstraints { make in
+//            make.top.equalTo(view.safeAreaLayoutGuide).offset(140)
+//            make.trailing.equalTo(view).offset(-80)
+//            make.width.equalTo(30)
+//            make.height.equalTo(20)
+//        }
+//    }
+//    
+//    func setupDidDaysLabel() {
+//        let didDaysLabel = UILabel()
+//        didDaysLabel.text = "진행 일수"
+//        didDaysLabel.textColor = .darkGray
+//        didDaysLabel.font = UIFont.systemFont(ofSize: 15)
+//        didDaysLabel.translatesAutoresizingMaskIntoConstraints = false
+//        view.addSubview(didDaysLabel)
+//        
+//        didDaysLabel.snp.makeConstraints { make in
+//            make.top.equalTo(view.safeAreaLayoutGuide).offset(165)
+//            make.leading.equalTo(view).offset(60)
+//            make.height.equalTo(20)
+//        }
+//    }
+//    
+//    func setupDidMinutesLabel() {
+//        let didMinutesLabel = UILabel()
+//        didMinutesLabel.text = "진행 총시간"
+//        didMinutesLabel.textColor = .darkGray
+//        didMinutesLabel.font = UIFont.systemFont(ofSize: 15)
+//        didMinutesLabel.translatesAutoresizingMaskIntoConstraints = false
+//        view.addSubview(didMinutesLabel)
+//        
+//        didMinutesLabel.snp.makeConstraints { make in
+//            make.top.equalTo(view.safeAreaLayoutGuide).offset(165)
+//            make.leading.equalTo(view).offset(150)
+//            make.height.equalTo(20)
+//        }
+//    }
+//    
+//    func setupDidHabbitsLabel() {
+//        let didHabbitsLabel = UILabel()
+//        didHabbitsLabel.text = "완료한 습관수"
+//        didHabbitsLabel.textColor = .darkGray
+//        didHabbitsLabel.font = UIFont.systemFont(ofSize: 15)
+//        didHabbitsLabel.translatesAutoresizingMaskIntoConstraints = false
+//        view.addSubview(didHabbitsLabel)
+//        
+//        didHabbitsLabel.snp.makeConstraints { make in
+//            make.top.equalTo(view.safeAreaLayoutGuide).offset(165)
+//            make.trailing.equalTo(view).offset(-50)
+//            make.height.equalTo(20)
+//        }
+//    }
+//
+//    func setupTotalLabelsStackView() {
+//        let customLabel1 = CustomLabel("4일", edgeInset: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
+//        let customLabel2 = CustomLabel("5분", edgeInset: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
+//        let customLabel3 = CustomLabel("0개", edgeInset: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
+//        
+//        let hStackView = HStackView(spacing: 20, alignment: .center, distribution: .equalSpacing, [customLabel1, customLabel2, customLabel3])
+//        view.addSubview(hStackView)
+//        
+//        hStackView.snp.makeConstraints { make in
+//            make.top.equalTo(view.safeAreaLayoutGuide).offset(140)
+//            make.leading.equalTo(view).offset(70)
+//            make.trailing.equalTo(view).offset(-80)
+//        }
+//    }
+//    
+//    func setupDidLabelsStackView() {
+//        let didDaysLabel = UILabel()
+//        didDaysLabel.text = "진행 일수"
+//        didDaysLabel.textColor = .darkGray
+//        didDaysLabel.font = UIFont.systemFont(ofSize: 15)
+//        didDaysLabel.translatesAutoresizingMaskIntoConstraints = false
+//        
+//        let didMinutesLabel = UILabel()
+//        didMinutesLabel.text = "진행 총시간"
+//        didMinutesLabel.textColor = .darkGray
+//        didMinutesLabel.font = UIFont.systemFont(ofSize: 15)
+//        didMinutesLabel.translatesAutoresizingMaskIntoConstraints = false
+//        
+//        let didHabbitsLabel = UILabel()
+//        didHabbitsLabel.text = "완료한 습관수"
+//        didHabbitsLabel.textColor = .darkGray
+//        didHabbitsLabel.font = UIFont.systemFont(ofSize: 15)
+//        didHabbitsLabel.translatesAutoresizingMaskIntoConstraints = false
+//        
+//        let hStackView = HStackView(spacing: 20, alignment: .center, distribution: .equalSpacing, [didDaysLabel, didMinutesLabel, didHabbitsLabel])
+//        view.addSubview(hStackView)
+//        
+//        hStackView.snp.makeConstraints { make in
+//            make.top.equalTo(view.safeAreaLayoutGuide).offset(165)
+//            make.leading.equalTo(view).offset(60)
+//            make.trailing.equalTo(view).offset(-50)
+//        }
+//    }
+
+HStackView 적용되면 
+
+import UIKit
+
+// MARK: - HStackView
+
+final class HStackView: UIStackView {
+    init(spacing: CGFloat = 10, alignment: UIStackView.Alignment = .center, distribution: UIStackView.Distribution = .equalSpacing,_ views: [UIView]) {
+        super.init(frame: .zero)
+        self.axis = .horizontal
+        self.spacing = spacing
+        self.alignment = alignment
+        self.distribution = distribution
+        self.translatesAutoresizingMaskIntoConstraints = false
+        
+        for v in views {
+            addArrangedSubview(v)
+        }
+    }
+    
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+ func setupTotalLabelsStackView() {
+        let customLabel1 = CustomLabel("4일", edgeInset: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
+        let customLabel2 = CustomLabel("5분", edgeInset: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
+        let customLabel3 = CustomLabel("0개", edgeInset: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5))
+        
+        let hStackView = HStackView(spacing: 20, alignment: .center, distribution: .equalSpacing, [customLabel1, customLabel2, customLabel3])
+        view.addSubview(hStackView)
+        
+        hStackView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(137)
+            make.leading.equalTo(view).offset(70)
+            make.trailing.equalTo(view).offset(-80)
+        }
+    }
+
+    func setupDidLabelsStackView() {
+        let didDaysLabel = UILabel()
+        didDaysLabel.text = "진행 일수"
+        didDaysLabel.textColor = .darkGray
+        didDaysLabel.font = UIFont.systemFont(ofSize: 15)
+        didDaysLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        let didMinutesLabel = UILabel()
+        didMinutesLabel.text = "진행 총시간"
+        didMinutesLabel.textColor = .darkGray
+        didMinutesLabel.font = UIFont.systemFont(ofSize: 15)
+        didMinutesLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        let didHabbitsLabel = UILabel()
+        didHabbitsLabel.text = "완료한 습관수"
+        didHabbitsLabel.textColor = .darkGray
+        didHabbitsLabel.font = UIFont.systemFont(ofSize: 15)
+        didHabbitsLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        let hStackView = HStackView(spacing: 20, alignment: .center, distribution: .equalSpacing, [didDaysLabel, didMinutesLabel, didHabbitsLabel])
+        view.addSubview(hStackView)
+        
+        hStackView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(165)
+            make.leading.equalTo(view).offset(60)
+            make.trailing.equalTo(view).offset(-50)
+        }
+    }
+    
+    func setupTableView() {
+        let topMargin: CGFloat = 360
+        let tableViewFrame = CGRect(x: 0, y: topMargin, width: view.bounds.width, height: view.bounds.height - topMargin)
+        myPageTableView = UITableView(frame: tableViewFrame, style: .plain)
+        myPageTableView.separatorStyle = .none
+        myPageTableView.dataSource = self
+        myPageTableView.delegate = self
+        myPageTableView.register(MyPageTableViewCell.self, forCellReuseIdentifier: "cell")
+        view.addSubview(myPageTableView)
+        
+        myPageTableView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(topMargin)
+            make.left.right.bottom.equalToSuperview()
+        }
+    }
+}
+
+
