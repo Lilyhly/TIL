@@ -1,0 +1,35 @@
+import UIKit
+
+// MARK: - MyPageTableViewCell
+
+final class MyPageTableViewCell: UITableViewCell {
+    
+    // MARK: - Properties
+    
+    static let reuseIdentifier = "MyPageTableViewCell"
+    
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        
+    }
+}
+
+func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    guard let cell = tableView.dequeueReusableCell(withIdentifier: MyPageTableViewCell.reuseIdentifier, for: indexPath) as? MyPageTableViewCell else {
+        fatalError("无法从重用队列中获取 MyPageTableViewCell")
+    }
+    
+    let model = myPageCellModels[indexPath.row]
+    cell.textLabel?.text = model.title
+    cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+    cell.textLabel?.textColor = .darkGray
+    
+    return cell
+}
+
+
+使用 guard let 的主要目的是在获取可选类型的实例时进行安全解包。在这种情况下，
+我们试图从重用队列中获取一个 MyPageTableViewCell 实例，但如果出现错误，即无法获取实例，我们就会立即退出方法，并抛出一个 fatalError。
+这有助于在出现问题时及早发现并排除错误，提高代码的健壮性和可靠性。
+
+
