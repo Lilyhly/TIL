@@ -1,0 +1,16 @@
+在Swift中，ViewController之间的数据传递通常分为直接传递方式（同步方式）和间接传递方式（异步方式）两种。
+
+直接传递方式（同步方式）：
+
+直接传递数据：在调用present或push时，通过访问属性直接传递数据。
+使用Segue的prepare方法：在使用Segue进行页面跳转时，可以在prepare方法中将数据传递给目标ViewController。
+使用协议/委托模式：目标ViewController实现一个协议，源ViewController设置目标ViewController的委托，并在需要时调用委托方法传递数据。
+使用闭包（Closure）：在目标ViewController中设置一个闭包属性，在源ViewController中设置闭包的具体实现，然后将闭包传递给目标ViewController，在需要时调用闭包来传递数据。
+使用NotificationCenter：发送者通过NotificationCenter发送消息，接收者通过注册Observer监听消息，实现数据传递。
+
+间接传递方式（异步方式）：
+
+使用AppDelegate.swift：在AppDelegate中存储数据，在需要时从AppDelegate中获取数据。但这种方式不够优雅，因为AppDelegate不应该承担数据管理的责任。
+使用UserDefaults：将数据存储在UserDefaults中，需要时从中获取数据。适用于少量简单数据的存储和检索。
+使用CoreData或Realm：使用CoreData或Realm等数据库框架进行数据持久化，不同的ViewController可以从同一个数据存储中读取或写入数据。
+选择适当的数据传递方式取决于您的应用程序的架构、需求和设计目标。通常，直接传递方式更直观，但对于较大的应用程序或复杂的数据管理需求，间接传递方式可能更适合。
