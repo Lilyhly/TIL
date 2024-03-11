@@ -1,0 +1,16 @@
+1. feat/#21-MypageView 브랜치로 체크아웃 2. git reset(명령어 검색해보세요!) 을 하나 해서 커밋 969446e을 없애고 ( 작업 사항은 남아있고 커밋은 안되어있는 상태 즉, 마지막 커밋이 5b96e4d인 상태)로 만든다음에 remote(git hub) feat/#21-MypageView로 force push
+
+
+
+1. feat/#21-MypageView 브랜치로 체크아웃 
+2. git reset(명령어 검색해보세요!) 을 하나 해서 커밋 969446e을 없애고 ( 작업 사항은 남아있고 커밋은 안되어있는 상태 즉, 마지막 커밋이 5b96e4d인 상태)로 만든다음에 
+3. remote(git hub) feat/#21-MypageView로 force push
+3번 하기 전에 로컬에 남아있는 커밋하지 않은 저장 내용들은 stash를 하든 삭제하든지 해서 변경사항이 남아있지 않고 깨끗한 상태를 만든 다음에 push 해야 함
+
+liyan@hongliyandeiMac PomoHabit % git checkout feat/#21--MypageView
+Already on 'feat/#21--MypageView'
+Your branch is ahead of 'origin/feat/#21--MypageView' by 1 commit.
+  (use "git push" to publish your local commits)
+liyan@hongliyandeiMac PomoHabit % git reset --hard 5b96e4d
+HEAD is now at 5b96e4d Merge remote-tracking branch 'origin/develop' into feat/#21--MypageView
+liyan@hongliyandeiMac PomoHabit % git push origin feat/#21--MypageView --force
