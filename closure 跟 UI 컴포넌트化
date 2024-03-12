@@ -1,0 +1,48 @@
+클로저를 활용한 선언과 초기 설정
+
+메서드화를 하면서 메서드 만들고 실행시키는 과정이 좀 귀찮으시지 않으셨나요?
+ 
+이렇게 클로저를 사용하면 UI 컴포넌트를 선언하면서 동시에 간편하게 초기 설정을 할 수 있어요 ㅎㅎ
+class SomeViewController: UIViewController {  
+
+    private let someLabel: UILabel = {  
+        let label = UILabel()  
+        label.text = "블라블라"  
+        label.textColor = .blue  
+        return label  
+    }()  
+}  
+이 방식은 각 UI 컴포넌트가 자신의 설정을 내부적으로 가지고 있게 만들어 선언과 초기화를 한 곳에서 관리할 수 있는 장점이 있어요.
+팩토리 메서드를 이용한 컴포넌트 생성
+
+마지막으로 팩토리 메서드를 사용하여 UI 컴포넌트를 생성하는 방법입니다.
+이렇게 메서드로 만들면 다른 뷰에서 같은 속성이 필요한 경우 메서드를 프로퍼티에 넣어서 생성할 수가 있어요!
+class SomeViewController: UIViewController {  
+    private let someLabel: UILabel = makeSomeLabel()  
+
+    override func viewDidLoad() {  
+        super.viewDidLoad()  
+    }  
+
+    private func makeSomeLabel() -> UILabel {  
+        let label = UILabel()  
+        label.text = "블라블라"  
+        label.textColor = .blue  
+        return label  
+    }  
+}
+
+上面的代码展示了两种初始化 UI 组件的方法：
+
+利用闭包声明和初始化设置：
+
+这种方法使用闭包来声明 UI 组件并同时进行初始化设置。
+例如，使用闭包声明 someLabel，并在其中初始化标签并设置文本和文本颜色。
+这种方法让每个 UI 组件拥有自己的设置，使代码简洁且易于阅读。
+
+利用工厂方法创建组件：
+
+这种方法使用工厂方法来创建 UI 组件。
+例如，使用 makeSomeLabel() 方法来初始化 someLabel。该方法初始化标签并进行必要的设置。
+这种方法允许在需要相同属性的情况下调用相应的方法来创建 UI 组件，提高了代码的可重用性。
+这两种方法都是达到相同目标的不同途径。使用闭包的方法简单直观，而使用工厂方法的方法可以提高代码的可重用性。选择哪种方法取决于项目需求和代码结构。
