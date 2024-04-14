@@ -1,0 +1,23 @@
+在 Swift 中，guard let 和 if let 都是用于可选绑定的语句，用于解包可选类型。它们的主要区别在于它们的使用场景和语义上的不同。
+
+if let: 这种语句用于在代码块内部进行可选绑定。如果可选值存在，则执行 if 语句块内的代码，否则，不执行。示例：
+
+
+if let unwrappedValue = optionalValue {
+    // 如果 optionalValue 不为 nil，unwrappedValue 将包含其值
+    // 这里可以安全地使用 unwrappedValue
+} else {
+    // optionalValue 为 nil
+}
+
+guard let: 这种语句通常用于在函数内部进行可选绑定，但有一个重要的区别：guard 语句必须在函数的顶部，并且在执行后必须退出当前作用域（通常是通过 return、break、continue 或 throw）。这使得 guard 在条件不满足时提前退出函数，以避免深度嵌套代码块。示例：
+
+
+func someFunction(optionalValue: Int?) {
+    guard let unwrappedValue = optionalValue else {
+        // 如果 optionalValue 为 nil，则执行这里的代码块
+        return // 退出函数
+    }
+    // 如果 optionalValue 不为 nil，则这里可以安全地使用 unwrappedValue
+}
+因此，if let 用于在代码块内部执行可选绑定，而 guard let 则用于在函数内部执行可选绑定，并提前退出函数以确保代码的清晰性和安全性。
