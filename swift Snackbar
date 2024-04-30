@@ -28,12 +28,6 @@ UIView Componont화 방법
 
 要将 Snackbar 视图组件化，可以创建一个单独的 Swift 文件来定义 Snackbar 类，并使其成为一个可重用的组件。下面是如何将 Snackbar 视图组件化的步骤：
 
-创建一个新的 Swift 文件，命名为 Snackbar.swift（或者根据你的偏好选择其他名称）。
-在 Snackbar.swift 文件中定义一个名为 Snackbar 的类，并将 Snackbar 视图的配置和显示逻辑移到这个类中。确保在类的顶部添加 import UIKit 以导入 UIKit 框架。
-将 Snackbar 视图的自定义属性和方法放入 Snackbar 类中。你可以保留 SnackbarView 类作为内部私有类，以便在 Snackbar 类中使用它。
-提供一个公共方法，比如 showSnackbar，让调用者可以方便地显示 Snackbar 消息。这个方法应该接受标题和消息作为参数，并在视图中显示 Snackbar。
-如果需要，你可以添加其他自定义功能或选项，比如自定义颜色、动画效果等。
-下面是一个示例 Snackbar.swift 文件的结构：
 
 import UIKit
 
