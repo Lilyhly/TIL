@@ -1,0 +1,107 @@
+在Swift中，"Snackbar"通常是指在iOS应用程序中显示短暂消息的视图组件，类似于Android中的Snackbar。要在Swift中使用Snackbar，通常需要使用第三方库或自定义视图来实现。
+
+一种常见的方法是使用第三方库，如SwiftMessages或Toast-Swift。这些库提供了简单易用的方法来显示Snackbar消息，并具有一些自定义选项，如持续时间、背景颜色、字体样式等。
+
+以下是使用SwiftMessages库在Swift中显示Snackbar消息的简单示例：
+
+首先，确保你已经将SwiftMessages库集成到你的项目中。
+
+import SwiftMessages
+
+// 在需要显示Snackbar的地方调用下面的代码
+let messageView = MessageView.viewFromNib(layout: .cardView)
+messageView.configureTheme(.info)
+messageView.configureContent(title: "提示", body: "这是一个Snackbar消息.")
+messageView.button?.isHidden = true
+
+// 将消息视图添加到队列中并显示
+var config = SwiftMessages.defaultConfig
+config.presentationStyle = .bottom
+config.duration = .seconds(seconds: 2)
+SwiftMessages.show(config: config, view: messageView)
+
+这段代码将显示一个简单的Snackbar消息，持续时间为2秒，消息内容为"这是一个Snackbar消息."。你可以根据需要自定义消息的主题、内容和持续时间。
+
+使用第三方库能够方便快速地在Swift应用程序中实现Snackbar消息，使得用户界面更加丰富和友好。
+
+UIView Componont화 방법 
+
+要将 Snackbar 视图组件化，可以创建一个单独的 Swift 文件来定义 Snackbar 类，并使其成为一个可重用的组件。下面是如何将 Snackbar 视图组件化的步骤：
+
+创建一个新的 Swift 文件，命名为 Snackbar.swift（或者根据你的偏好选择其他名称）。
+在 Snackbar.swift 文件中定义一个名为 Snackbar 的类，并将 Snackbar 视图的配置和显示逻辑移到这个类中。确保在类的顶部添加 import UIKit 以导入 UIKit 框架。
+将 Snackbar 视图的自定义属性和方法放入 Snackbar 类中。你可以保留 SnackbarView 类作为内部私有类，以便在 Snackbar 类中使用它。
+提供一个公共方法，比如 showSnackbar，让调用者可以方便地显示 Snackbar 消息。这个方法应该接受标题和消息作为参数，并在视图中显示 Snackbar。
+如果需要，你可以添加其他自定义功能或选项，比如自定义颜色、动画效果等。
+下面是一个示例 Snackbar.swift 文件的结构：
+
+import UIKit
+
+class Snackbar {
+    static func showSnackbar(in view: UIView, title: String, message: String) {
+        let snackbarView = SnackbarView(frame: CGRect(x: 0, y: -100, width: view.frame.width, height: 100))
+        snackbarView.configure(title: title, message: message)
+        view.addSubview(snackbarView)
+        
+        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseInOut, animations: {
+            snackbarView.frame.origin.y = 0
+        }, completion: { _ in
+            UIView.animate(withDuration: 0.5, delay: 2, options: .curveEaseInOut, animations: {
+                snackbarView.frame.origin.y = -100
+            }, completion: { _ in
+                snackbarView.removeFromSuperview()
+            })
+        })
+    }
+}
+
+extension Snackbar {
+    private class SnackbarView: UIView {
+        private let titleLabel = UILabel()
+        private let messageLabel = UILabel()
+        
+        override init(frame: CGRect) {
+            super.init(frame: frame)
+            configureView()
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        private func configureView() {
+            // Configure view layout and appearance
+            // ...
+        }
+        
+        func configure(title: String, message: String) {
+            titleLabel.text = title
+            messageLabel.text = message
+        }
+    }
+}
+
+在这个示例中，Snackbar 类和 SnackbarView 类都放在了同一个文件中，并通过 extension 来组织代码。这种方法可以让代码更易读和管理。
+
+Snackbar 类：
+Snackbar 类是一个辅助类，用于显示 Snackbar 消息。它包含一个静态方法 showSnackbar(in:title:message:)，用于在指定的视图中显示 Snackbar 消息。
+这个方法接受三个参数：
+view：要显示 Snackbar 的视图。
+title：Snackbar 消息的标题。
+message：Snackbar 消息的内容。
+SnackbarView 类：
+SnackbarView 类是一个私有的内部类，用于创建 Snackbar 视图。
+这个类继承自 UIView，表示一个自定义的视图。
+它包含两个私有的属性 titleLabel 和 messageLabel，用于显示 Snackbar 的标题和内容。
+构造函数 init(frame:) 用于初始化 Snackbar 视图。
+方法 configureView() 用于配置 Snackbar 视图的外观和布局。
+方法 configure(title:message:) 用于设置 Snackbar 的标题和内容。
+showSnackbar 方法：
+showSnackbar(in:title:message:) 方法是 Snackbar 类的静态方法，用于在指定的视图中显示 Snackbar 消息。
+在这个方法中，首先创建了 SnackbarView 实例，并通过调用 configure(title:message:) 方法配置了标题和内容。
+然后将 SnackbarView 添加到指定的视图中，并使用动画将其从顶部滑入。
+通过使用动画，Snackbar 会在显示一段时间后自动隐藏并从视图中移除。
+使用 extension 组件化：
+通过将 SnackbarView 类放在 Snackbar 类的 extension 中，可以将 Snackbar 相关的代码分离到单独的 extension 中，使代码更清晰和模块化。
+这种方法还可以防止 SnackbarView 类被其他类访问，因为它被声明为 private，只能在 Snackbar 类内部访问。
+通过这种方式，你可以轻松地在项目中重复使用 Snackbar，并且代码更易读和维护。
