@@ -1,3 +1,5 @@
+
+
 什么是依赖注入？
 依赖注入（DI）是一种设计模式，用于将对象的依赖关系从类内部移到类的外部。它的主要优点包括：
 
@@ -10,3 +12,232 @@
 方法注入：通过方法参数传递依赖关系。
 当前代码的问题
 当前代码中，你仍然在类内部创建了依赖对象实例，这违背了DI的原则。我们需要通过外部将依赖对象传递给类实例。
+
+
+DI의 핵심 요소
+생성자 주입(Constructor Injection): 필요한 의존성을 생성자를 통해 주입받습니다.
+필드 주입(Field Injection): 의존성을 필드를 통해 주입받습니다.
+메소드 주입(Method Injection): 의존성을 메소드를 통해 주입받습니다.
+현재 코드 분석
+현재 코드는 다음과 같은 방식으로 의존성을 주입하고 있습니다:
+
+CoreDataManager와 WeeklyHabitInfoModel을 생성자를 통해 주입받고 있습니다.
+swift
+複製程式碼
+init(weeklyHabitInfo: WeeklyHabitInfoModel, coreDataManager: CoreDataManager = .shared) {
+    self.weeklyHabitInfo = weeklyHabitInfo
+    self.coreDataManager = coreDataManager
+    super.init(nibName: nil, bundle: nil)
+}
+이는 생성자 주입의 형태로, 의존성 주입의 한 형태입니다.
+이 부분이 DI의 대표적인 예입니다. WeeklyCalendarViewController는 WeeklyHabitInfoModel과 CoreDataManager에 의존하고 있지만, 직접 생성하지 않고 외부에서 주입받고 있습니다.
+
+개선 가능한 부분
+DI를 더 명확히 하기 위해서 다음과 같은 개선사항을 고려할 수 있습니다:
+
+강한 의존성 제거: CoreDataManager.shared와 같이 기본값으로 싱글톤을 제공하는 대신, 외부에서 명시적으로 주입하도록 강제할 수 있습니다. 이는 더 테스트 가능한 코드를 만들 수 있습니다.
+의존성 주입 프레임워크 사용: Swinject와 같은 의존성 주입 프레임워크를 사용하여 의존성 관리를 자동화할 수 있습니다.
+개선된 코드 예시
+swift
+複製程式碼
+import UIKit
+import SnapKit
+
+// MARK: - WeeklyCalendarViewController
+
+final class WeeklyCalendarViewController: BaseViewController {
+    
+    // MARK: - Properties
+    private var weeklyDates: [Date] = []
+    private var weeklyHabitState: [HabitState] = []
+    private var weeklyHabitInfo: WeeklyHabitInfoModel
+    private let coreDataManager: CoreDataManager
+    
+    // MARK: - Views
+    private lazy var weeklyCalendarView: WeeklyCalendarView = {
+        let view = WeeklyCalendarView()
+        view.dateDelegate = self
+        return view
+    }()
+    
+    // MARK: - Init
+    init(weeklyHabitInfo: WeeklyHabitInfoModel, coreDataManager: CoreDataManager) {
+        self.weeklyHabitInfo = weeklyHabitInfo
+        self.coreDataManager = coreDataManager
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Life Cycle
+    override func loadView() {
+        super.loadView()
+        view = weeklyCalendarView
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        getWeeklyData()
+        setWeeklyCalendView()
+        getTargetHabit()
+        getWeeklyHabitState()
+        setWeeklyHabiState()
+        getTodayHabitInfo()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        weeklyCalendarView.moveToSelectedCell(weeklyDates: weeklyDates)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        setUpWeeklyHabbitProgressView(progress: getWeeklyProgress())
+    }
+}
+
+// MARK: - View 相关 Methods
+private extension WeeklyCalendarViewController {
+    func setWeeklyCalendView() {
+        weeklyCalendarView.setWeeklyDates(weeklyDates: weeklyDates)
+    }
+    
+    func setWeeklyHabiState() {
+        weeklyCalendarView.setWeeklyHabitState(setData: weeklyHabitState)
+    }
+    
+    func setUpWeeklyHabbitProgressView(progress : Float) {
+        if progress != 0 {
+            let weeklyCalendarViewWidth = weeklyCalendarView.frame.width
+            let progressCircleOffset = Int(weeklyCalendarViewWidth * CGFloat(progress)) + 5
+            weeklyCalendarView.setProgressCircleImg(offset: progressCircleOffset)
+            weeklyCalendarView.setWeeklyHabitProgressView(progress: progress)
+        }
+    }
+}
+
+// MARK: - Data 相关 method
+private extension WeeklyCalendarViewController {
+    func getWeeklyData() {
+        var getWeeklyDates: [Date] = []
+        let calendar = Calendar.current
+        
+        // 当前周的开始日期
+        guard let startDate = calendar.dateInterval(of: .weekOfYear, for: Date())?.start else { return }
+        
+        // 周一开始
+        guard let mondayDate = calendar.date(byAdding: .day, value: 1, to: startDate) else { return }
+        
+        // 获取一周的数据
+        for i in 0...6 {
+            guard let date = calendar.date(byAdding: .day, value: i, to: mondayDate) else { return }
+            getWeeklyDates.append(date)
+        }
+        
+        weeklyDates = getWeeklyDates
+    }
+    
+    func getWeeklyHabitState() {
+        do {
+            var getWeeklyHabitState: [HabitState] = []
+            for date in weeklyDates {
+                let dateHabitState = try coreDataManager.getSelectedHabitInfo(selectedDate: date).map { $0.hasDone }
+                let currentDate = Date()
+                
+                if date.comparisonDate(fromDate: currentDate) == 1 { // 未来日期
+                    if dateHabitState == false {
+                        getWeeklyHabitState.append(.notStart)
+                    } else {
+                        getWeeklyHabitState.append(.dayOff)
+                    }
+                } else if date.comparisonDate(fromDate: currentDate) == 0 { // 今天
+                    switch dateHabitState {
+                    case true:
+                        getWeeklyHabitState.append(.done)
+                    case false:
+                        getWeeklyHabitState.append(.notStart)
+                    case nil:
+                        getWeeklyHabitState.append(.dayOff)
+                    case .some(_):
+                        break
+                    }
+                } else { // 过去日期
+                    switch dateHabitState {
+                    case true:
+                        getWeeklyHabitState.append(.done)
+                    case false:
+                        getWeeklyHabitState.append(.doNot)
+                    case nil:
+                        getWeeklyHabitState.append(.dayOff)
+                    case .some(_):
+                        break
+                    }
+                }
+            }
+            weeklyHabitState = getWeeklyHabitState
+        } catch {
+            print(error)
+        }
+    }
+    
+    func getTargetHabit() {
+        do {
+            let userInfo = try coreDataManager.fetchUser()
+            weeklyHabitInfo.targetHabit = userInfo?.targetHabit ?? "习惯名称"
+        } catch {
+            print(error)
+        }
+    }
+    
+    func getDuringTime(completedDate: Date, goalTime: Int16) -> String {
+        let endTime = completedDate.dateToString(format: "HH:mm")
+        let startTime = Calendar.current.date(byAdding: .minute, value: -Int(goalTime), to: completedDate)?.dateToString(format: "HH:mm") ?? "00:00"
+        return startTime + " ~ " + endTime
+    }
+    
+    func getWeeklyProgress() -> Float {
+        return Float(weeklyHabitState.filter { $0 == .done }.count) / 7.0
+    }
+    
+    func getTodayHabitInfo() {
+        do {
+            let todayHabitInfo = try coreDataManager.getSelectedHabitInfo(selectedDate: Date())
+            var todayHabitState: HabitState = .notStart
+            var duringTime: String = ""
+            var goalTime: Int16 = todayHabitInfo?.goalTime ?? 0
+            
+            switch todayHabitInfo?.hasDone {
+            case true:
+                todayHabitState = .done
+                duringTime = getDuringTime(completedDate: todayHabitInfo?.date ?? Date(), goalTime: todayHabitInfo?.goalTime ?? 0)
+            case false:
+                todayHabitState = .notStart
+                duringTime = "00:00 ~ 00:00"
+            case nil:
+                todayHabitState = .dayOff
+                duringTime = "休息日"
+                goalTime = 0
+            case .some(_):
+                break
+            }
+            
+            weeklyCalendarView.setHabitInfoView(state: todayHabitState, targetHabit: weeklyHabitInfo.targetHabit ?? "目标习惯", duringTime: duringTime, goalTime: goalTime)
+            weeklyCalendarView.setNoteContentLabel(note: todayHabitInfo?.note ?? "备注")
+        } catch {
+            print(error)
+        }
+    }
+    
+    func setSelectedHabitInfo(date: Date) {
+        do {
+            let currentDate = Date()
+            if let selectedHabitInfo = try coreDataManager.getSelectedHabitInfo(selectedDate: date) {
+                weeklyHabitInfo.note = selectedHabitInfo.note
+                if date.comparisonDate(fromDate: currentDate) == 1 { // 未来日期
+                    weeklyHabitInfo.habitstate = .notStart
+                    weeklyHabitInfo.goalTime = selectedHabitInfo.goalTime
+                    weeklyHabitInfo.duringTime = "00:00 ~ 00:00"
+                } else { // 过去或今天
+                    weeklyHabitInfo.habitstate = selectedHabitInfo.hasDone ? .done : .doNot
