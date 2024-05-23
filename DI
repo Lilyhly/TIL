@@ -22,8 +22,7 @@ DI의 핵심 요소
 현재 코드는 다음과 같은 방식으로 의존성을 주입하고 있습니다:
 
 CoreDataManager와 WeeklyHabitInfoModel을 생성자를 통해 주입받고 있습니다.
-swift
-複製程式碼
+
 init(weeklyHabitInfo: WeeklyHabitInfoModel, coreDataManager: CoreDataManager = .shared) {
     self.weeklyHabitInfo = weeklyHabitInfo
     self.coreDataManager = coreDataManager
@@ -38,8 +37,7 @@ DI를 더 명확히 하기 위해서 다음과 같은 개선사항을 고려할 
 강한 의존성 제거: CoreDataManager.shared와 같이 기본값으로 싱글톤을 제공하는 대신, 외부에서 명시적으로 주입하도록 강제할 수 있습니다. 이는 더 테스트 가능한 코드를 만들 수 있습니다.
 의존성 주입 프레임워크 사용: Swinject와 같은 의존성 주입 프레임워크를 사용하여 의존성 관리를 자동화할 수 있습니다.
 개선된 코드 예시
-swift
-複製程式碼
+
 import UIKit
 import SnapKit
 
