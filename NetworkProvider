@@ -1,0 +1,90 @@
+这个 NetworkProvider 类提供了一种通过网络请求获取数据的方式，并将其解析为指定类型的 Decodable 对象。具体来说，它是一个通用的网络请求类，利用 Swift 的 async/await 机制进行异步请求。以下是该方法的详细解释：
+
+import Foundation
+
+final class NetworkProvider {
+    
+    static let shared = NetworkProvider()
+    
+    private init() { }
+    
+    private let baseURL = URL(string: "https://itunes.apple.com/")
+    
+    func fetchAPI<T: Decodable>(path: String, queryItems: [URLQueryItem]) async throws -> T {
+        guard let baseURL = baseURL else {
+            throw ErrorFactory.makeError(fromErrorCode: 404, errorDescription: "Invalid base URL")
+        }
+        
+        var urlComponents = URLComponents(url: baseURL.appendingPathComponent(path), resolvingAgainstBaseURL: true)
+        urlComponents?.queryItems = queryItems
+        
+        guard let url = urlComponents?.url else {
+            throw ErrorFactory.makeError(fromErrorCode: 404, errorDescription: "Invalid URL")
+        }
+        
+        let request = URLRequest(url: url)
+        NetworkLogger.log(request: request)
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            NetworkLogger.log(response: response, data: data, error: nil)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                throw ErrorFactory.makeError(fromErrorCode: 500, errorDescription: "Invalid response type")
+            }
+            
+            guard 200...299 ~= httpResponse.statusCode else {
+                throw ErrorFactory.makeError(fromErrorCode: httpResponse.statusCode, errorDescription: nil)
+            }
+            
+            let decodedResponse = try JSONDecoder().decode(T.self, from: data)
+            return decodedResponse
+        } catch {
+            NetworkLogger.log(response: nil, data: nil, error: error)
+            if let decodingError = error as? DecodingError {
+                throw ErrorFactory.makeError(fromErrorCode: -1, errorDescription: decodingError.localizedDescription)
+            }
+            throw error
+        }
+    }
+}
+
+
+详细解释
+单例模式：
+
+NetworkProvider 使用单例模式，通过 shared 静态属性确保在应用生命周期内只有一个实例。
+初始化：
+
+构造函数 private init() 是私有的，防止外部初始化。
+基础 URL：
+
+baseURL 是 API 的基础 URL，这里设置为 iTunes 的 API 根地址。
+通用网络请求方法：
+
+fetchAPI<T: Decodable>(path:queryItems:) async throws -> T 是一个通用的方法，用于从指定路径和查询参数获取数据，并解析为指定的 Decodable 类型 T。
+参数 path 是 API 路径，queryItems 是查询参数。
+URL 组装：
+
+使用 URLComponents 组装完整的请求 URL，包括基础 URL、路径和查询参数。
+如果组装失败，则抛出错误。
+发送请求：
+
+创建 URLRequest 对象并记录请求日志。
+使用 URLSession.shared.data(for:) 发送请求，等待响应。
+处理响应：
+
+记录响应日志。
+检查响应类型和状态码，确保是成功的 HTTP 响应。
+使用 JSONDecoder 解码响应数据为指定的 Decodable 类型 T。
+如果解码失败，则记录错误并抛出自定义错误。
+错误处理：
+
+捕获所有错误，记录日志，并抛出相应的错误。
+如果是解码错误，抛出特定的解码错误。
+
+
+总结
+NetworkProvider 类提供了一个通用的、基于 async/await 的网络请求方法 fetchAPI，可以发送网络请求并解析 JSON 响应。
+使用单例模式确保在应用中只有一个实例。
+处理 URL 组装、网络请求、响应解析和错误处理，封装得非常完善，易于复用。
