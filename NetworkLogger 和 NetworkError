@@ -1,0 +1,81 @@
+NetworkLogger 和 NetworkError 是两个不同的工具，它们用于不同的目的：
+
+NetworkLogger:
+
+目的: 主要用于在开发和调试过程中记录网络请求和响应的详细信息。
+功能:
+记录请求的 URL、HTTP 方法、头部字段和请求体。
+记录响应的 URL、状态码、头部字段和响应数据。
+记录在请求或响应过程中发生的错误。
+通过使用 NetworkLogger，开发者可以在控制台中查看详细的网络通信日志，这有助于快速定位和解决问题。
+
+NetworkError:
+
+目的: 用于描述和管理网络请求过程中可能发生的各种错误。
+功能:
+定义了多种错误类型，例如 badURL、urlSession、badResponse、invalidResponse、decoding 和 unknown。
+提供了人类可读的错误描述（通过 description 属性）。
+提供了本地化的错误描述（通过 localizedDescription 属性），用于向最终用户展示更友好的错误信息。
+NetworkError 通过定义和处理不同类型的错误，帮助开发者在代码中更清晰地管理错误情况，并提供有用的错误信息给用户或日志系统。
+
+两者的差别
+功能差别:
+
+NetworkLogger 的功能是记录和打印请求和响应的详细信息，以便开发者在控制台中查看和调试。
+NetworkError 的功能是描述和管理错误，以便在代码中处理错误情况，并提供有意义的错误信息。
+使用场景差别:
+
+NetworkLogger 通常在每个请求和响应时调用，用于输出日志。
+NetworkError 在发生错误时使用，用于抛出或返回错误，以便上层代码可以处理这些错误。
+
+import Foundation
+
+// 模拟的网络请求函数
+func performNetworkRequest() async {
+    let url = URL(string: "https://example.com/api")!
+    var request = URLRequest(url: url)
+    request.httpMethod = "GET"
+    
+    // 记录请求
+    NetworkLogger.log(request: request)
+    
+    do {
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        // 记录响应
+        NetworkLogger.log(response: response, data: data, error: nil)
+        
+        // 模拟响应数据的解析
+        let decodedResponse = try JSONDecoder().decode(MyModel.self, from: data)
+        print("Decoded response: \(decodedResponse)")
+        
+    } catch {
+        // 记录错误
+        NetworkLogger.log(response: nil, data: nil, error: error)
+        
+        // 转换并处理错误
+        if let urlError = error as? URLError {
+            let networkError = NetworkError.urlSession(urlError)
+            print("Localized error description: \(networkError.localizedDescription)")
+        } else if let decodingError = error as? DecodingError {
+            let networkError = NetworkError.decoding(decodingError)
+            print("Localized error description: \(networkError.localizedDescription)")
+        } else {
+            let networkError = NetworkError.unknown
+            print("Localized error description: \(networkError.localizedDescription)")
+        }
+    }
+}
+
+// 示例模型
+struct MyModel: Decodable {
+    let id: Int
+    let name: String
+}
+
+
+在这个示例中：
+
+NetworkLogger 用于记录请求和响应的详细信息。
+NetworkError 用于处理在网络请求过程中可能发生的错误，并提供本地化的错误描述。
+这种组合使用可以帮助开发者更好地调试网络请求，同时为用户提供友好的错误信息。
