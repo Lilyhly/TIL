@@ -1,0 +1,98 @@
+import Foundation
+
+class ItunesAPI {
+    static let shared = ItunesAPI()
+    let baseURL = URL(string: "https://itunes.apple.com/") // 修正初始化方法
+
+    private init() { // 构造函数不需要内部的 var url 变量
+        // 初始化代码可以放在这里
+    }
+}
+这个版本中：
+
+baseURL 正确地初始化为一个 URL 对象。
+init() 方法是空的，因为目前不需要在初始化时做其他事情。
+shared 是一个静态常量，用于实现单例模式。
+如果需要实现其他方法来处理 URL，应该在类的范围内定义，而不是在 init 方法内。
+
+举个例子，假设你需要一个方法来构建完整的 URL：
+
+
+import Foundation
+
+class ItunesAPI {
+    static let shared = ItunesAPI()
+    let baseURL = URL(string: "https://itunes.apple.com/")
+
+    private init() { }
+    
+    func buildURL(with path: String, queryItems: [URLQueryItem]? = nil) -> URL? {
+        guard let baseURL = baseURL else { return nil }
+        var urlComponents = URLComponents(url: baseURL.appendingPathComponent(path), resolvingAgainstBaseURL: true)
+        urlComponents?.queryItems = queryItems
+        return urlComponents?.url
+    }
+}
+这个方法 buildURL(with:queryItems:) 可以帮助你构建相对路径和查询参数的完整 URL。
+
+在 Swift 中，String 是一个结构体类型，用于表示字符串，而 string 是 URL 结构体的一个初始值设定项，用于创建 URL 实例。你所提到的 URL(string:) 是 URL 类型的一个初始化方法，接受一个 String 类型的参数来创建一个 URL 实例。
+
+以下是一些详细解释：
+
+String 类型
+String 是 Swift 标准库中的一个类型，用于表示文本数据。它是一个大写的类型名称，因为它是一个类型名（结构体名）。
+
+string 参数名
+string 是 URL 的初始化方法中的参数名称，它是小写的，因为它是一个变量名。Swift 中的变量名和参数名通常使用小写字母开头，遵循驼峰式命名规则。
+
+URL(string:) 初始化方法
+URL 结构体有一个初始化方法 init?(string: String)，用于接受一个字符串参数，并返回一个可选的 URL 实例。如果字符串是一个有效的 URL，它将创建并返回 URL 对象；否则，它将返回 nil。
+
+下面是一个例子来说明这一点：
+
+
+import Foundation
+
+// 创建一个有效的 URL 实例
+if let validURL = URL(string: "https://itunes.apple.com/") {
+    print("这是一个有效的 URL: \(validURL)")
+} else {
+    print("这是一个无效的 URL")
+}
+
+// 尝试创建一个无效的 URL 实例
+if let invalidURL = URL(string: "invalid URL string") {
+    print("这是一个有效的 URL: \(invalidURL)")
+} else {
+    print("这是一个无效的 URL")
+}
+在上面的代码中：
+
+URL(string: "https://itunes.apple.com/") 使用大写的 String 类型创建一个 URL 实例。
+string 是 URL 初始化方法中的参数名，传入一个 String 类型的值。
+修改后的代码
+回到你之前的代码示例，下面是修改后的版本，使用正确的初始化方法：
+
+
+import Foundation
+
+class ItunesAPI {
+    static let shared = ItunesAPI()
+    let baseURL = URL(string: "https://itunes.apple.com/") // 使用正确的初始化方法
+
+    private init() { }
+
+    // 添加一个方法来构建完整的 URL
+    func buildURL(with path: String, queryItems: [URLQueryItem]? = nil) -> URL? {
+        guard let baseURL = baseURL else { return nil }
+        var urlComponents = URLComponents(url: baseURL.appendingPathComponent(path), resolvingAgainstBaseURL: true)
+        urlComponents?.queryItems = queryItems
+        return urlComponents?.url
+    }
+}
+这样，baseURL 正确地初始化为一个 URL 对象，确保在使用时不会出错。
+
+
+
+
+
