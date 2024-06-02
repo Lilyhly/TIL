@@ -1,0 +1,69 @@
+构建完整的 URL 对于 API 请求来说是非常重要的，因为一个完整的 URL 包含了所有必要的信息，包括路径和查询参数。这些信息用于准确定位服务器上的资源，从而正确地发出请求并获取响应。
+
+以下是一些详细原因，解释为什么需要构建完整的 URL：
+
+1. 指定资源路径
+API 请求的路径部分（例如 /search 或 /lookup）指定了要访问的具体资源或服务端点。没有正确的路径，服务器将无法识别你请求的是哪个资源。
+
+2. 添加查询参数
+许多 API 需要查询参数来过滤或自定义返回的数据。例如，在 iTunes 搜索 API 中，term 参数指定了搜索的关键字，而 entity 参数指定了要搜索的实体类型（如软件、音乐等）。构建完整的 URL 包含这些参数以确保服务器能正确处理请求并返回所需的数据。
+
+3. 避免手动拼接字符串的错误
+通过使用 URLComponents 和 URLQueryItem 来构建 URL，可以减少手动拼接字符串时的错误。例如，处理 URL 编码、查询参数的拼接和特殊字符的转义等。
+
+4. 确保 URL 的合法性
+使用 URLComponents 构建 URL 可以确保生成的 URL 是合法且正确的。它会自动处理 URL 编码，确保所有的查询参数和路径都被正确地编码和解析。
+
+示例代码解释
+以下是前面提供的代码示例中，构建完整 URL 的方法：
+
+
+import Foundation
+
+class ItunesAPI {
+    static let shared = ItunesAPI()
+    let baseURL = URL(string: "https://itunes.apple.com/") // 基础 URL
+
+    private init() { }
+
+    // 构建完整 URL 的方法
+    func buildURL(with path: String, queryItems: [URLQueryItem]? = nil) -> URL? {
+        // 确保基础 URL 有效
+        guard let baseURL = baseURL else { return nil }
+        
+        // 使用 URLComponents 构建 URL
+        var urlComponents = URLComponents(url: baseURL.appendingPathComponent(path), resolvingAgainstBaseURL: true)
+        
+        // 添加查询参数
+        urlComponents?.queryItems = queryItems
+        
+        // 返回完整的 URL
+        return urlComponents?.url
+    }
+}
+代码细节
+基础 URL：let baseURL = URL(string: "https://itunes.apple.com/") 创建了一个基础 URL，表示 iTunes API 的主机地址。
+
+构建 URL 的方法：buildURL(with:queryItems:) 方法接受路径和可选的查询参数，使用 URLComponents 来构建完整的 URL。
+
+路径和查询参数：
+
+urlComponents = URLComponents(url: baseURL.appendingPathComponent(path), resolvingAgainstBaseURL: true)：将路径附加到基础 URL。
+urlComponents?.queryItems = queryItems：添加查询参数。
+返回完整的 URL：return urlComponents?.url 返回构建的完整 URL。
+
+使用示例
+假设你要搜索一个应用：
+
+
+let searchTerm = "example app"
+let queryItems = [
+    URLQueryItem(name: "term", value: searchTerm),
+    URLQueryItem(name: "entity", value: "software")
+]
+
+if let url = ItunesAPI.shared.buildURL(with: "search", queryItems: queryItems) {
+    print(url)
+    // 输出: https://itunes.apple.com/search?term=example+app&entity=software
+}
+这种方法确保了 URL 的正确性和完整性，使得 API 请求更加健壮和可维护。
