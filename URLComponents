@@ -1,0 +1,45 @@
+URLComponents 是一个非常有用的类，可以帮助我们构建和解析 URL。在你的代码中，URLComponents 被用来构建一个带有查询参数的完整 URL。
+
+var urlComponents = URLComponents(url: baseURL.appendingPathComponent(path), resolvingAgainstBaseURL: true)
+这行代码的作用是创建一个 URLComponents 实例，用于构建完整的 URL。让我们详细解释一下这段代码的意思：
+
+1. baseURL.appendingPathComponent(path)
+baseURL 是一个基础 URL，例如 https://itunes.apple.com/。
+path 是你想要附加到基础 URL 的路径，例如 search 或 lookup。
+appendingPathComponent(_:) 方法将 path 附加到 baseURL 的末尾，形成一个新的 URL。例如，如果 baseURL 是 https://itunes.apple.com/ 并且 path 是 search，那么结果 URL 将是 https://itunes.apple.com/search。
+
+2. URLComponents(url:resolvingAgainstBaseURL:)
+URLComponents(url: resolvingAgainstBaseURL:) 初始化一个 URLComponents 实例。
+url 参数是我们刚刚生成的完整 URL，例如 https://itunes.apple.com/search。
+resolvingAgainstBaseURL 参数是一个布尔值，指定是否解析相对 URL。
+resolvingAgainstBaseURL: true 的意义
+当 resolvingAgainstBaseURL 为 true 时，如果传入的 URL 是相对 URL，它将被解析为相对于基础 URL 的完整 URL。在这个上下文中，我们传入的是一个绝对 URL，所以这个参数的影响不大。
+
+URLComponents 的作用
+URLComponents 的主要作用是帮助我们方便地构建和解析 URL，特别是带有查询参数的 URL。使用 URLComponents 可以避免手动拼接字符串时容易出现的错误，例如忘记对特殊字符进行 URL 编码等。
+
+示例代码
+让我们看一个具体的例子：
+
+let baseURL = URL(string: "https://itunes.apple.com/")!
+let path = "search"
+var urlComponents = URLComponents(url: baseURL.appendingPathComponent(path), resolvingAgainstBaseURL: true)
+
+let queryItems = [
+    URLQueryItem(name: "term", value: "example app"),
+    URLQueryItem(name: "entity", value: "software")
+]
+
+urlComponents?.queryItems = queryItems
+
+if let url = urlComponents?.url {
+    print(url)
+    // 输出: https://itunes.apple.com/search?term=example+app&entity=software
+}
+详细步骤
+创建基础 URL：baseURL 是 https://itunes.apple.com/。
+附加路径：baseURL.appendingPathComponent(path) 将路径 search 附加到基础 URL，生成 https://itunes.apple.com/search。
+初始化 URLComponents：URLComponents(url: resolvingAgainstBaseURL:) 使用生成的 URL 创建一个 URLComponents 实例。
+添加查询参数：urlComponents?.queryItems = queryItems 添加查询参数 term 和 entity。
+生成最终 URL：urlComponents?.url 返回最终的完整 URL，即 https://itunes.apple.com/search?term=example+app&entity=software。
+通过使用 URLComponents，可以确保生成的 URL 是合法的，并且所有的查询参数都被正确地编码和解析，从而避免手动拼接字符串可能带来的错误。
