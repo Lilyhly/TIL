@@ -1,0 +1,89 @@
+构建完整 URL 的方法与 URLSession 有密切的关系，因为 URLSession 需要一个有效的 URL 来发送网络请求。以下是它们之间关系的详细解释：
+
+构建完整 URL 的方法
+在进行网络请求之前，你需要一个完整的 URL，这个 URL 包含了你要请求的资源路径和可能的查询参数。构建这个完整 URL 的步骤通常如下：
+
+基础 URL：这是你要请求的基础路径，比如 API 服务器的地址。
+路径：这是基础 URL 后面具体的资源路径，比如 /search 或 /lookup。
+查询参数：这些是附加到 URL 后面的参数，用于指定请求的详细信息，比如搜索关键词、分页参数等。
+使用 URLComponents 可以帮助你方便地构建这个完整的 URL，避免手动拼接字符串带来的错误。以下是一个示例：
+
+
+import Foundation
+
+let baseURL = URL(string: "https://itunes.apple.com/")!
+let path = "search"
+var urlComponents = URLComponents(url: baseURL.appendingPathComponent(path), resolvingAgainstBaseURL: true)
+urlComponents?.queryItems = [
+    URLQueryItem(name: "term", value: "Twitter"),
+    URLQueryItem(name: "entity", value: "software")
+]
+
+guard let url = urlComponents?.url else {
+    fatalError("Invalid URL components")
+}
+URLSession 的使用
+URLSession 是用于执行网络请求和处理响应的类。它需要一个完整的 URL 作为输入参数来创建请求。通常你会执行以下步骤：
+
+创建 URL：通过构建完整的 URL，确保它是正确的并且包含所有必要的路径和查询参数。
+创建 URLRequest：使用完整的 URL 创建一个 URLRequest 对象。
+创建和启动 URLSession 数据任务：通过 URLSession 创建一个数据任务，并启动它来发送请求和接收响应。
+以下是一个使用 URLSession 的完整示例：
+
+import Foundation
+
+// 构建完整 URL
+let baseURL = URL(string: "https://itunes.apple.com/")!
+let path = "search"
+var urlComponents = URLComponents(url: baseURL.appendingPathComponent(path), resolvingAgainstBaseURL: true)
+urlComponents?.queryItems = [
+    URLQueryItem(name: "term", value: "Twitter"),
+    URLQueryItem(name: "entity", value: "software")
+]
+
+guard let url = urlComponents?.url else {
+    fatalError("Invalid URL components")
+}
+
+// 创建 URLRequest
+var request = URLRequest(url: url)
+request.httpMethod = "GET"
+
+// 使用 URLSession 进行网络请求
+let task = URLSession.shared.dataTask(with: request) { data, response, error in
+    if let error = error {
+        print("Error: \(error.localizedDescription)")
+        return
+    }
+    
+    guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
+        print("Invalid response")
+        return
+    }
+    
+    guard let data = data else {
+        print("No data received")
+        return
+    }
+    
+    // 处理接收到的数据
+    do {
+        let decoder = JSONDecoder()
+        let searchResult = try decoder.decode(AppSearchResult.self, from: data)
+        print("Search results: \(searchResult.results)")
+    } catch {
+        print("Failed to decode JSON: \(error.localizedDescription)")
+    }
+}
+
+// 启动任务
+task.resume()
+关系总结
+构建完整 URL：这一步确保你有一个正确的、包含所有必要路径和参数的 URL。URLComponents 类提供了一种安全、方便的方法来构建这个 URL。
+URLSession 使用：URLSession 需要一个有效的 URL 来发送请求。通过 URLRequest 你可以配置请求的 HTTP 方法、头信息等。然后使用 URLSession 创建一个数据任务，启动这个任务以发送请求并处理响应。
+构建完整 URL 是使用 URLSession 的前提条件之一，因为没有正确的 URL，URLSession 无法执行网络请求。通过结合使用这两者，你可以构建健壮的网络请求代码。
+
+
+
+
+
