@@ -1,0 +1,29 @@
+import Foundation
+
+struct ItunesSearchResult: Codable {
+    let resultCount: Int
+    let results: [Track]
+}
+
+struct Track: Codable {
+    let trackName: String?
+    let artistName: String?
+}
+
+"trackName": null
+"artistName": null
+
+
+用Postman傳送get請求的話,可以收到以下Json。
+文章的幾個鍵值中只使用了title、url、description。 (不需要定義所有的Key值,只使用想要的值就可以了)
+大家在這裡注意到錯誤了嗎？
+請仔細考慮一下，看看下面的問題解決！
+ 
+解決問題
+---------------------------------------
+問題就在描述值值上!
+我以為描述中無條件有value,但是有些文章有null值來了(默克)
+我把描述的型別設定為String,為了以防null值進來,應該換成可選的形式吧?
+
+這樣在String後面貼上問號就可以解決了!
+還有在View上顯示的時候也請準備該值為nil的時候~^^
