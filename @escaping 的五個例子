@@ -1,0 +1,95 @@
+解释@escaping的关键点在于理解函数的生命周期以及闭包何时被调用。以下是具体示例中的每个地方，闭包在函数生命周期之外被调用的情况：
+
+1. 异步操作中的 @escaping
+在异步操作（例如网络请求）中，闭包通常在异步操作完成后调用，而此时原函数已经返回。
+
+swift
+複製程式碼
+func fetchData(completion: @escaping (String) -> Void) {
+    DispatchQueue.global().async {
+        // 模拟异步操作（例如：网络请求）
+        let result = "来自服务器的数据"
+        DispatchQueue.main.async {
+            completion(result) // 这里闭包在原函数 fetchData 返回之后被调用
+        }
+    }
+}
+
+fetchData { data in
+    print("接收到的数据: \(data)") // 原函数 fetchData 返回后，这个闭包才被调用
+}
+2. 在存储属性中的 @escaping
+闭包被存储为属性，当稍后某个时间点手动调用时，函数已经返回。
+
+swift
+複製程式碼
+class NetworkManager {
+    var completionHandler: ((String) -> Void)?
+    
+    func requestData(completion: @escaping (String) -> Void) {
+        self.completionHandler = completion // 闭包被存储，函数返回后再调用
+    }
+    
+    func completeRequest() {
+        completionHandler?("网络数据") // 这里闭包在 requestData 返回之后被调用
+    }
+}
+
+let manager = NetworkManager()
+manager.requestData { data in
+    print("数据: \(data)") // 闭包在 completeRequest 被调用时才执行
+}
+manager.completeRequest() // 此时 requestData 已经返回
+3. 在数组中的闭包使用 @escaping
+闭包被存储到数组中，并在稍后某个时间点被调用，函数已经返回。
+
+swift
+複製程式碼
+var closures: [(String) -> Void] = []
+
+func addClosure(closure: @escaping (String) -> Void) {
+    closures.append(closure) // 闭包被存储在数组中，函数返回后才调用
+}
+
+addClosure { message in
+    print("闭包调用，消息: \(message)") // 原函数 addClosure 返回后，闭包才被调用
+}
+
+for closure in closures {
+    closure("你好") // 这里闭包在 addClosure 返回之后被调用
+}
+4. 定时器中的 @escaping
+定时器触发时，闭包在函数返回后被调用。
+
+swift
+複製程式碼
+func startTimer(completion: @escaping () -> Void) {
+    Timer.scheduledTimer(withTimeInterval: 1.0, repeats: false) { timer in
+        completion() // 这里闭包在 startTimer 返回之后被调用
+    }
+}
+
+startTimer {
+    print("定时器完成") // 定时器触发时，闭包才被调用
+}
+5. 网络请求中的 @escaping
+网络请求完成后，闭包在原函数返回后被调用。
+
+swift
+複製程式碼
+func performNetworkRequest(url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> Void) {
+    let task = URLSession.shared.dataTask(with: url) { data, response, error in
+        completion(data, response, error) // 这里闭包在 performNetworkRequest 返回之后被调用
+    }
+    task.resume()
+}
+
+let url = URL(string: "https://www.example.com")!
+performNetworkRequest(url: url) { data, response, error in
+    if let error = error {
+        print("错误: \(error)")
+    } else if let data = data {
+        print("接收到的数据: \(data)") // 闭包在网络请求完成时才被调用
+    }
+}
+在这些示例中，@escaping 关键字告诉编译器闭包可能在函数返回后被调用，这是因为闭包的执行时间与原函数的执行时间不一致。
