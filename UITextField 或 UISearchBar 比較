@@ -1,0 +1,125 @@
+在 UIKit 中，可以使用 UITextField 或 UISearchBar 来实现搜索功能。两者都有各自的优势和适用场景。下面我们来比较一下它们：
+
+UITextField
+优点：
+
+简单易用：UITextField 是一个基本的输入控件，用于接收用户输入，适合简单的文本输入需求。
+灵活性高：由于它是一个基本控件，你可以对其进行高度定制，添加各种功能和样式。
+占用空间小：适合空间有限的界面，或者你只需要简单的输入框时使用。
+缺点：
+
+功能单一：需要额外的代码来处理清除按钮、取消按钮等搜索相关功能。
+没有内置的搜索行为：需要自己实现搜索逻辑和界面更新。
+示例代码：
+
+swift
+複製程式碼
+import UIKit
+
+class ViewController: UIViewController {
+
+    private let searchTextField: UITextField = {
+        let textField = UITextField()
+        textField.placeholder = "Enter search term"
+        textField.borderStyle = .roundedRect
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        return textField
+    }()
+    
+    private let fetchButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Search", for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        view.backgroundColor = .white
+        view.addSubview(searchTextField)
+        view.addSubview(fetchButton)
+        
+        NSLayoutConstraint.activate([
+            searchTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            searchTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            searchTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            searchTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            
+            fetchButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            fetchButton.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: 20),
+        ])
+        
+        fetchButton.addTarget(self, action: #selector(fetchButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func fetchButtonTapped() {
+        guard let searchTerm = searchTextField.text, !searchTerm.isEmpty else {
+            print("Please enter a search term.")
+            return
+        }
+        // 进行搜索
+        print("Searching for: \(searchTerm)")
+    }
+}
+UISearchBar
+优点：
+
+内置搜索功能：UISearchBar 提供了清除按钮、取消按钮等内置功能，方便用户搜索。
+符合用户期望：用户已经习惯了使用搜索栏进行搜索，这种控件提供了良好的用户体验。
+更适合复杂的搜索界面：适合需要更多搜索相关功能的场景，例如显示历史记录、建议等。
+缺点：
+
+相对复杂：相对于 UITextField，UISearchBar 更加复杂，需要处理更多的代理方法和状态变化。
+占用空间大：相对于 UITextField，UISearchBar 占用的界面空间更多。
+示例代码：
+
+swift
+複製程式碼
+import UIKit
+
+class ViewController: UIViewController, UISearchBarDelegate {
+
+    private let searchBar: UISearchBar = {
+        let searchBar = UISearchBar()
+        searchBar.placeholder = "Enter search term"
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        return searchBar
+    }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        view.backgroundColor = .white
+        view.addSubview(searchBar)
+        
+        searchBar.delegate = self
+        
+        NSLayoutConstraint.activate([
+            searchBar.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+        ])
+    }
+    
+    // UISearchBarDelegate 方法
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let searchTerm = searchBar.text, !searchTerm.isEmpty else {
+            print("Please enter a search term.")
+            return
+        }
+        // 进行搜索
+        print("Searching for: \(searchTerm)")
+        searchBar.resignFirstResponder()
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.text = ""
+        searchBar.resignFirstResponder()
+    }
+}
+总结
+UITextField 更适合简单的输入需求，灵活性高，占用空间小，但需要自己实现搜索相关功能。
+UISearchBar 提供了更多内置的搜索相关功能，更符合用户习惯，但相对复杂且占用空间更多。
+选择哪个控件取决于你的具体需求。如果你需要一个简单的输入框，UITextField 是一个不错的选择。如果你需要一个功能齐全的搜索栏，UISearchBar 更加适合。
